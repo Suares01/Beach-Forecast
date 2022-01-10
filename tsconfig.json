@@ -32,6 +32,11 @@
       "./src",
       "./tests"
     ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types",
+      "./tests/@types"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
