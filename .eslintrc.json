@@ -20,9 +20,9 @@
   ],
   "rules": {
     "no-console": "off",
-    // "class-methods-use-this": "off",
-    // "no-param-reassign": "off",
-    // "no-shadow": "off",
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off",
     "indent": "off",
     "@typescript-eslint/indent": [
       "error"
@@ -34,7 +34,6 @@
         "devDependencies": true
       }
     ],
-    // "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
