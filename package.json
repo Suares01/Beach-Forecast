@@ -10,7 +10,7 @@
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "start": "npm run build && node -r dotenv/config dist/Server.js"
+    "start": "yarn build && node -r dotenv/config dist/Server.js"
   },
   "repository": {
     "type": "git",
