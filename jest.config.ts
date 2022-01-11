@@ -6,7 +6,7 @@ export default {
   clearMocks: true,
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
-    '@test/(.*)': '<rootDir>/test/$1',
+    '@tests/(.*)': '<rootDir>/tests/$1',
   },
   preset: 'ts-jest',
 };
