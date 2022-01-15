@@ -16,7 +16,8 @@
       {
         "alias": {
           "@src": "./src",
-          "@tests": "./tests"
+          "@tests": "./tests",
+          "@config": "./config"
         }
       }
     ]

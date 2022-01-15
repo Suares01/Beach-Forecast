@@ -7,6 +7,7 @@ export default {
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
     '@tests/(.*)': '<rootDir>/tests/$1',
+    '@config/(.*)': '<rootDir>/config/$1',
   },
   preset: 'ts-jest',
 };

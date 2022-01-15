@@ -26,6 +26,9 @@
       ],
       "@tests/*": [
         "./tests/*"
+      ],
+      "@config/*": [
+        "./config/*"
       ]
     },
     "rootDirs": [

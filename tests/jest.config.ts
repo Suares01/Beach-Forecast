@@ -8,6 +8,7 @@ export default {
     moduleNameMapper: {
       '@src/(.*)': '<rootDir>/../src/$1',
       '@tests/(.*)': '<rootDir>/$1',
+      '@config/(.*)': '<rootDir>/../config/$1',
     },
     testMatch: ['<rootDir>/**/*.spec.ts'],
   },
