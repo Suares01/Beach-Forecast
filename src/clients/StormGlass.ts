@@ -61,13 +61,9 @@ export class StormGlass {
 
       return normalizedData;
     } catch (err: any) {
-      if (HTTPUtil.Request.isRequestError(err)) {
-        throw new StormGlassRequestError(
-          `Error: ${JSON.stringify(err.response.data)} Code: ${err.response.status}`,
-        );
-      }
+      if (HTTPUtil.Request.isRequestError(err)) throw new StormGlassRequestError(err);
 
-      throw new ClientRequestError(err.message);
+      throw new ClientRequestError(err);
     }
   }
 
