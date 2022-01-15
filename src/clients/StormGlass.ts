@@ -1,6 +1,8 @@
+import { IStormGlassConfig } from '@config/types/configTypes';
 import { ClientRequestError } from '@src/util/errors/ClientRequestError';
 import { StormGlassRequestError } from '@src/util/errors/StormGlassRequestError';
-import { AxiosError, AxiosStatic } from 'axios';
+import * as HTTPUtil from '@src/util/Request';
+import config from 'config';
 
 export interface IStormGlassSource {
   [key: string]: number
@@ -32,8 +34,10 @@ export interface IForecastPoint {
   windSpeed: number
 }
 
+const stormGlassResourceConfig = config.get<IStormGlassConfig>('App.resources.StormGlass');
+
 export class StormGlass {
-  constructor(protected request: AxiosStatic) { }
+  constructor(private request = new HTTPUtil.Request()) {}
 
   private readonly stormGlassAPIParams = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
 
@@ -44,9 +48,9 @@ export class StormGlass {
       const response = await this.request.get<IStormGlassForecastResponse>(
         `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=1641924000&end=1641924000`,
         {
-          baseURL: 'https://api.stormglass.io/v2',
+          baseURL: stormGlassResourceConfig.apiUrl,
           headers: {
-            Authorization: `${process.env.API_KEY}`,
+            Authorization: stormGlassResourceConfig.apiToken,
           },
         },
       );
@@ -56,16 +60,14 @@ export class StormGlass {
       const normalizedData = this.normalizeResponse(data);
 
       return normalizedData;
-    } catch (err) {
-      const axiosError = err as AxiosError;
-
-      if (axiosError.response && axiosError.response.status) {
+    } catch (err: any) {
+      if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassRequestError(
-          `Error: ${JSON.stringify(axiosError.response.data)} Code: ${axiosError.response.status}`,
+          `Error: ${JSON.stringify(err.response.data)} Code: ${err.response.status}`,
         );
       }
 
-      throw new ClientRequestError(axiosError.message);
+      throw new ClientRequestError(err.message);
     }
   }
 
