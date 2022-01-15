@@ -1,4 +1,6 @@
-import { AxiosStatic } from 'axios';
+import { ClientRequestError } from '@src/util/errors/ClientRequestError';
+import { StormGlassRequestError } from '@src/util/errors/StormGlassRequestError';
+import { AxiosError, AxiosStatic } from 'axios';
 
 export interface IStormGlassSource {
   [key: string]: number
@@ -33,26 +35,38 @@ export interface IForecastPoint {
 export class StormGlass {
   constructor(protected request: AxiosStatic) { }
 
-  readonly stormGlassAPIParams = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
+  private readonly stormGlassAPIParams = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
 
-  readonly stormGlassAPISource = 'noaa';
+  private readonly stormGlassAPISource = 'noaa';
 
   public async fetchPoints(lat: number, lng: number): Promise<IForecastPoint[]> {
-    const response = await this.request.get<IStormGlassForecastResponse>(
-      `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=1641924000&end=1641924000`,
-      {
-        baseURL: 'https://api.stormglass.io/v2',
-        headers: {
-          Authorization: `${process.env.API_KEY}`,
+    try {
+      const response = await this.request.get<IStormGlassForecastResponse>(
+        `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=1641924000&end=1641924000`,
+        {
+          baseURL: 'https://api.stormglass.io/v2',
+          headers: {
+            Authorization: `${process.env.API_KEY}`,
+          },
         },
-      },
-    );
+      );
 
-    const { data } = response;
+      const { data } = response;
 
-    const normalizedData = this.normalizeResponse(data);
+      const normalizedData = this.normalizeResponse(data);
 
-    return normalizedData;
+      return normalizedData;
+    } catch (err) {
+      const axiosError = err as AxiosError;
+
+      if (axiosError.response && axiosError.response.status) {
+        throw new StormGlassRequestError(
+          `Error: ${JSON.stringify(axiosError.response.data)} Code: ${axiosError.response.status}`,
+        );
+      }
+
+      throw new ClientRequestError(axiosError.message);
+    }
   }
 
   private normalizeResponse(points: IStormGlassForecastResponse): IForecastPoint[] {
