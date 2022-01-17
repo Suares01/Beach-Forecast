@@ -20,6 +20,12 @@
           "@config": "./config"
         }
       }
+    ],
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
     ]
   ],
   "ignore": [
