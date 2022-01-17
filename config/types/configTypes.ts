@@ -4,11 +4,18 @@ export interface IStormGlassConfig {
 }
 
 export interface IResources {
-  resources: {
-    StormGlass: IStormGlassConfig
-  }
+  StormGlass: IStormGlassConfig
+}
+
+export interface IDatabase {
+  mongoUrl: string
+}
+
+export interface IConfigs {
+  database: IDatabase
+  resources: IResources
 }
 
 export interface IAppConfig {
-  App: IResources
+  App: IConfigs
 }
