@@ -1,4 +1,7 @@
+import 'dotenv/config';
+
 import { Server } from '@overnightjs/core';
+import * as database from '@src/database/database';
 import bodyParser from 'body-parser';
 
 import { ForecastController } from './controllers/ForecastController';
@@ -8,9 +11,10 @@ export class SetupServer extends Server {
     super();
   }
 
-  public initServer(): void {
+  public async initServer(): Promise<void> {
     this.setupExpress();
     this.setupControllers();
+    await this.databaseSetup();
   }
 
   private setupExpress(): void {
@@ -23,5 +27,13 @@ export class SetupServer extends Server {
     this.addControllers([
       forecastController,
     ]);
+  }
+
+  private async databaseSetup(): Promise<void> {
+    await database.connect();
+  }
+
+  public async close(): Promise<void> {
+    await database.close();
   }
 }
