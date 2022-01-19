@@ -1,14 +1,6 @@
 import { IForecastPoint, StormGlass } from '@src/clients/StormGlass';
-import { BeachPosition } from '@src/models/Beach';
+import { IBeach } from '@src/models/Beach';
 import { ForecastProcessingInternalError } from '@src/util/errors/ForecastProcessingInternalError';
-
-export interface IBeach {
-  lat: number,
-  lng: number,
-  name: string,
-  position: BeachPosition,
-  userId: string,
-}
 
 export interface IBeachForecast extends Omit<IBeach, 'userId'>, IForecastPoint { }
 
