@@ -33,8 +33,6 @@ describe('Beaches functional tests', () => {
         error:
         'Beach validation failed: lat: Cast to Number failed for value "invalidString" (type string) at path "lat"',
       });
-
-      it.skip('should return 500 when there is any error other than validation error');
     });
   });
 });
