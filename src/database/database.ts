@@ -10,7 +10,7 @@ const uriDev = `mongodb://${DB_USER}:${DB_PASS}@localhost:27017/${DB_NAME}?authS
 
 export const connect = async (): Promise<Mongoose> => {
   mongoose.connection.on('error', () => console.error('Database connection failed'));
-  mongoose.connection.once('open', () => console.log('Database connected'));
+  mongoose.connection.once('open', () => console.log('\x1b[32m%s\x1b[0m', 'Database connected'));
 
   return mongoose.connect(uriDev);
 };
