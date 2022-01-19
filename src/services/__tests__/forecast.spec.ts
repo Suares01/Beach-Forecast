@@ -1,8 +1,9 @@
 import { StormGlass } from '@src/clients/StormGlass';
+import { BeachPosition, IBeach } from '@src/models/Beach';
 import { ForecastProcessingInternalError } from '@src/util/errors/ForecastProcessingInternalError';
 import stormGlassNormalizedResponseFixture from '@tests/fixtures/stormGlassNormalizedWeather15hoursFixtues.json';
 
-import { BeachPosition, Forecast, IBeach } from '../Forecast';
+import { Forecast } from '../Forecast';
 
 jest.mock('@src/clients/StormGlass');
 
@@ -15,7 +16,6 @@ describe('Forecast Service', () => {
       lng: -43.1811,
       name: 'Copacabana',
       position: BeachPosition.east,
-      userId: 'some-id',
     },
   ];
 
