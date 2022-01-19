@@ -1,12 +1,6 @@
 import { IForecastPoint, StormGlass } from '@src/clients/StormGlass';
+import { BeachPosition } from '@src/models/Beach';
 import { ForecastProcessingInternalError } from '@src/util/errors/ForecastProcessingInternalError';
-
-export enum BeachPosition {
-  south = 'S',
-  east = 'E',
-  west = 'W',
-  north = 'N'
-}
 
 export interface IBeach {
   lat: number,
