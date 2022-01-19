@@ -3,11 +3,18 @@ version: '3.7'
 services:
   database:
     image: mongo
-    container_name: mongo_database
+    container_name: database
+    command: mongod --auth
     restart: always
     ports:
-      - ${DATABASE_PORT}:27017
+      - ${DB_PORT}:27017
     environment:
-      - MONGO_INITDB_DATABASE=${DATABASE_NAME}
-      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USER_NAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_USER_PASSWORD}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+    volumes:
+      - dbdata:/data/db
+
+volumes:
+  dbdata:
+    driver: local
