@@ -21,9 +21,10 @@
   "rules": {
     "no-console": "off",
     "class-methods-use-this": "off",
-    "no-param-reassign": "error",
+    "no-param-reassign": "off",
     "no-shadow": "off",
     "no-return-await": "off",
+    "no-underscore-dangle": "off",
     "no-useless-constructor": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
