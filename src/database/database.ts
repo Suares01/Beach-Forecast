@@ -1,18 +1,25 @@
+import { IDatabaseConfig } from '@config/types/configTypes';
+import { SetupServer } from '@src/Server';
+import config from 'config';
 import mongoose, { Mongoose } from 'mongoose';
 
-const {
-  DB_USER, DB_PASS, DB_NAME,
-} = process.env;
-
-// const uriProd = `mongodb+srv://${DB_USER}:${DB_PASS}@surfapi.h3qnx.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
-
-const uriDev = `mongodb://${DB_USER}:${DB_PASS}@localhost:27017/${DB_NAME}?authSource=admin`;
+const database = config.get<IDatabaseConfig>('App.database');
 
 export const connect = async (): Promise<Mongoose> => {
-  mongoose.connection.on('error', () => console.error('Database connection failed'));
-  mongoose.connection.once('open', () => console.log('\x1b[32m%s\x1b[0m', 'Database connected'));
+  mongoose.connection.on('error', async () => {
+    const server = new SetupServer();
+    console.error('\x1b[31m%s\x1b[0m', 'Database connection failed');
 
-  return mongoose.connect(uriDev);
+    await server.close();
+  });
+
+  mongoose.connection.once('open', async () => console.log('\x1b[32m%s\x1b[0m', 'Database connected'));
+
+  return mongoose.connect(database.uri);
 };
 
-export const close = (): Promise<void> => mongoose.connection.close();
+export const close = (): Promise<void> => {
+  console.log('\x1b[32m%s\x1b[0m', 'Database disconnected');
+
+  return mongoose.connection.close();
+};
