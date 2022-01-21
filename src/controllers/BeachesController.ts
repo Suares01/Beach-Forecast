@@ -1,10 +1,11 @@
 import { Controller, Post } from '@overnightjs/core';
 import { Beach } from '@src/models/Beach';
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
+
+import { BaseController } from '.';
 
 @Controller('beaches')
-export class BeachesController {
+export class BeachesController extends BaseController {
   @Post('')
   public async create(req: Request, res: Response): Promise<Response> {
     try {
@@ -14,13 +15,7 @@ export class BeachesController {
 
       return res.status(201).send(result);
     } catch (err: any) {
-      if (err instanceof mongoose.Error.ValidationError) {
-        return res.status(422).send({
-          error: err.message,
-        });
-      }
-
-      return res.status(500).send({ error: 'Internal Server Error' });
+      return this.sendCreatedUpdateErrorResponse(res, err);
     }
   }
 }
