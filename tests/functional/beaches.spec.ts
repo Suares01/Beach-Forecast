@@ -29,10 +29,13 @@ describe('Beaches functional tests', () => {
       const response = await global.testRequest.post('/beaches').send(invalidBeach);
 
       expect(response.status).toBe(422);
-      expect(response.body).toEqual({
-        error:
+      expect(response.body).toEqual(
+        {
+          code: 422,
+          error:
         'Beach validation failed: lat: Cast to Number failed for value "invalidString" (type string) at path "lat"',
-      });
+        },
+      );
     });
   });
 });
