@@ -34,8 +34,6 @@ export interface IForecastPoint {
   windSpeed: number
 }
 
-const stormGlassResourceConfig = config.get<IStormGlassConfig>('App.resources.StormGlass');
-
 export class StormGlass {
   constructor(private request = new HTTPUtil.Request()) {}
 
@@ -43,14 +41,16 @@ export class StormGlass {
 
   private readonly stormGlassAPISource = 'noaa';
 
+  private stormGlass = config.get<IStormGlassConfig>('App.resources.StormGlass');
+
   public async fetchPoints(lat: number, lng: number): Promise<IForecastPoint[]> {
     try {
       const response = await this.request.get<IStormGlassForecastResponse>(
         `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=1641924000&end=1641924000`,
         {
-          baseURL: stormGlassResourceConfig.apiUrl,
+          baseURL: this.stormGlass.endpoint,
           headers: {
-            Authorization: stormGlassResourceConfig.apiToken,
+            Authorization: this.stormGlass.apiKey,
           },
         },
       );
