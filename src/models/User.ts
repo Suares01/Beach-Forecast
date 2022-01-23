@@ -1,20 +1,22 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model } from "mongoose";
+
+import { AuthService } from "@src/services/Auth";
 
 export interface IUser {
-  _id?: string
-  name: string
-  email: string
-  password: string
+  _id?: string;
+  name: string;
+  email: string;
+  password: string;
 }
 
-interface IUserModel extends Omit<IUser, '_id'>, Document {}
+interface IUserModel extends Omit<IUser, "_id">, Document {}
 
 export enum CustomValidation {
-  duplicated = 'duplicated',
-  required = 'required'
+  duplicated = "duplicated",
+  required = "required",
 }
 
-const schema = new mongoose.Schema(
+const schema = new mongoose.Schema<IUserModel>(
   {
     name: { type: String, required: true },
     email: { type: String, unique: true, required: true },
@@ -28,13 +30,31 @@ const schema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  },
+  }
 );
 
-schema.path('email').validate(async (email: string) => {
-  const emailCount = await mongoose.models.User.countDocuments({ email });
+schema.path("email").validate(
+  async (email: string) => {
+    const emailCount = await mongoose.models.User.countDocuments({ email });
 
-  return !emailCount;
-}, 'already exists in the database', CustomValidation.duplicated);
+    return !emailCount;
+  },
+  "already exists in the database",
+  CustomValidation.duplicated
+);
 
-export const User: Model<IUserModel> = mongoose.model('User', schema);
+schema.pre<IUserModel>("save", async function (): Promise<void> {
+  if (!this.password || !this.isModified("password")) {
+    return;
+  }
+
+  try {
+    const hashedPass = await AuthService.hashPassword(this.password);
+
+    this.password = hashedPass;
+  } catch (err) {
+    console.error(`Error hashing the password for the user ${this.name}`);
+  }
+});
+
+export const User: Model<IUserModel> = mongoose.model("User", schema);
