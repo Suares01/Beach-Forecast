@@ -1,6 +1,4 @@
-const {
-  DB_USER, DB_PASS, DB_NAME, DB_PORT,
-} = process.env;
+const { DB_USER, DB_PASS, DB_NAME, DB_PORT, API_KEY } = process.env;
 
 module.exports = {
   App: {
@@ -9,8 +7,8 @@ module.exports = {
     },
     resources: {
       StormGlass: {
-        endpoint: 'https://api.stormglass.io/v2',
-        apiKey: 'do-not-hard-code',
+        endpoint: "https://api.stormglass.io/v2",
+        apiKey: `${API_KEY}`,
       },
     },
   },

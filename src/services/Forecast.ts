@@ -1,18 +1,22 @@
-import { IForecastPoint, StormGlass } from '@src/clients/StormGlass';
-import { IBeach } from '@src/models/Beach';
-import { ForecastProcessingInternalError } from '@src/util/errors/ForecastProcessingInternalError';
+import { IForecastPoint, StormGlass } from "@src/clients/StormGlass";
+import { IBeach } from "@src/models/Beach";
+import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 
-export interface IBeachForecast extends Omit<IBeach, 'userId'>, IForecastPoint { }
+export interface IBeachForecast
+  extends Omit<IBeach, "userId">,
+    IForecastPoint {}
 
 export interface ITimeForecast {
-  time: string
-  forecast: IBeachForecast[]
+  time: string;
+  forecast: IBeachForecast[];
 }
 
 export class Forecast {
-  constructor(protected stormGlass = new StormGlass()) { }
+  constructor(protected stormGlass = new StormGlass()) {}
 
-  public async processForecastForBeaches(beaches: IBeach[]): Promise<ITimeForecast[]> {
+  public async processForecastForBeaches(
+    beaches: IBeach[]
+  ): Promise<ITimeForecast[]> {
     if (beaches.length === 0) return [];
 
     const beachForecast = await this.beachesForecast(beaches);
@@ -40,7 +44,10 @@ export class Forecast {
     return beachesForecast;
   }
 
-  private beachesWithForecast(points: IForecastPoint[], beach: IBeach): IBeachForecast[] {
+  private beachesWithForecast(
+    points: IForecastPoint[],
+    beach: IBeach
+  ): IBeachForecast[] {
     return points.map((point) => ({
       ...{
         lat: beach.lat,

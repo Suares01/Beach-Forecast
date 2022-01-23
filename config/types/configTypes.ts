@@ -1,21 +1,21 @@
 export interface IStormGlassConfig {
-  endpoint: string
-  apiKey: string
+  endpoint: string;
+  apiKey: string;
 }
 
 export interface IResourcesConfig {
-  StormGlass: IStormGlassConfig
+  StormGlass: IStormGlassConfig;
 }
 
 export interface IDatabaseConfig {
-  uri: string
+  uri: string;
 }
 
 export interface IConfig {
-  database: IDatabaseConfig
-  resources: IResourcesConfig
+  database: IDatabaseConfig;
+  resources: IResourcesConfig;
 }
 
 export interface IAppConfig {
-  App: IConfig
+  App: IConfig;
 }

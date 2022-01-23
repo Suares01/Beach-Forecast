@@ -1,10 +1,11 @@
-import { Server } from '@overnightjs/core';
-import * as database from '@src/database/database';
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 
-import { BeachesController } from './controllers/BeachesController';
-import { ForecastController } from './controllers/ForecastController';
-import { UsresController } from './controllers/UsersController';
+import { Server } from "@overnightjs/core";
+import * as database from "@src/database/database";
+
+import { BeachesController } from "./controllers/BeachesController";
+import { ForecastController } from "./controllers/ForecastController";
+import { UsresController } from "./controllers/UsersController";
 
 export class SetupServer extends Server {
   constructor(private port = process.env.SERVER_PORT) {
@@ -35,8 +36,11 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      (<any>process).send('ready');
-      console.log('\x1b[32m%s\x1b[0m', `Server is running on port ${this.port}`);
+      (<any>process).send("ready");
+      console.log(
+        "\x1b[32m%s\x1b[0m",
+        `Server is running on port ${this.port}`
+      );
     });
   }
 

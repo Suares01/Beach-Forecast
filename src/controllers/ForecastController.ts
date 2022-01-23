@@ -1,12 +1,16 @@
-import { Controller, Get } from '@overnightjs/core';
-import { Beach } from '@src/models/Beach';
-import { Forecast } from '@src/services/Forecast';
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-@Controller('forecast')
+import { Controller, Get } from "@overnightjs/core";
+import { Beach } from "@src/models/Beach";
+import { Forecast } from "@src/services/Forecast";
+
+@Controller("forecast")
 export class ForecastController {
-  @Get('')
-  public async getForecastForLoggedUser(_: Request, res: Response): Promise<Response> {
+  @Get("")
+  public async getForecastForLoggedUser(
+    _: Request,
+    res: Response
+  ): Promise<Response> {
     try {
       const forecast = new Forecast();
 
@@ -16,7 +20,7 @@ export class ForecastController {
 
       return res.status(200).send(forecasts);
     } catch (err) {
-      return res.status(500).send({ error: 'Something went wrong' });
+      return res.status(500).send({ error: "Something went wrong" });
     }
   }
 }

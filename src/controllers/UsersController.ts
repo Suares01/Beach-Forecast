@@ -1,19 +1,22 @@
-import { Controller, Post } from '@overnightjs/core';
-import { User } from '@src/models/User';
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { BaseController } from '.';
+import { Controller, Post } from "@overnightjs/core";
+import { IUser, User } from "@src/models/User";
 
-@Controller('users')
+import { BaseController } from ".";
+
+@Controller("users")
 export class UsresController extends BaseController {
-  @Post('')
+  @Post("")
   async create(req: Request, res: Response): Promise<Response> {
     try {
-      const user = new User(req.body);
+      const { name, email, password } = req.body as IUser;
 
-      const newUser = await user.save();
+      const user = new User({ name, email, password });
 
-      return res.status(201).send(newUser);
+      const { id, name: savedName, email: savedEmail } = await user.save();
+
+      return res.status(201).send({ id, name: savedName, email: savedEmail });
     } catch (err) {
       return this.sendCreatedUpdateErrorResponse(res, err);
     }

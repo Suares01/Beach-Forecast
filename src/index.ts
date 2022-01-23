@@ -1,4 +1,4 @@
-import { SetupServer } from './Server';
+import { SetupServer } from "./Server";
 
 const server = new SetupServer();
 
@@ -7,6 +7,6 @@ const server = new SetupServer();
   server.start();
 })();
 
-process.once('SIGINT', async () => {
+process.once("SIGINT", async () => {
   await server.close();
 });

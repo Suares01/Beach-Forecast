@@ -1,5 +1,6 @@
-import { SetupServer } from '@src/Server';
-import supertest from 'supertest';
+import supertest from "supertest";
+
+import { SetupServer } from "@src/Server";
 
 let server: SetupServer;
 beforeAll(async () => {

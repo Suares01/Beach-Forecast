@@ -1,21 +1,21 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model } from "mongoose";
 
 export enum BeachPosition {
-  south = 'S',
-  east = 'E',
-  west = 'W',
-  north = 'N'
+  south = "S",
+  east = "E",
+  west = "W",
+  north = "N",
 }
 
 export interface IBeach {
-  _id?: string
-  lat: number
-  lng: number
-  name: string
-  position: BeachPosition
+  _id?: string;
+  lat: number;
+  lng: number;
+  name: string;
+  position: BeachPosition;
 }
 
-interface IBeachModel extends Omit<IBeach, '_id'>, Document {}
+interface IBeachModel extends Omit<IBeach, "_id">, Document {}
 
 const schema = new mongoose.Schema(
   {
@@ -32,7 +32,7 @@ const schema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  },
+  }
 );
 
-export const Beach: Model<IBeachModel> = mongoose.model('Beach', schema);
+export const Beach: Model<IBeachModel> = mongoose.model("Beach", schema);

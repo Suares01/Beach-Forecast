@@ -1,8 +1,6 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const {
-  DB_USER, DB_PASS, DB_NAME, DB_PORT,
-} = process.env;
+const { DB_USER, DB_PASS, DB_NAME, DB_PORT } = process.env;
 
 module.exports = {
   App: {
@@ -11,8 +9,8 @@ module.exports = {
     },
     resources: {
       StormGlass: {
-        endpoint: 'https://api.stormglass.io/v2',
-        apiKey: 'test',
+        endpoint: "https://api.stormglass.io/v2",
+        apiKey: "test",
       },
     },
   },
