@@ -16,6 +16,7 @@ describe("Forecast Service", () => {
       lng: -43.1811,
       name: "Copacabana",
       position: BeachPosition.east,
+      user: "fake_id",
     },
   ];
 
