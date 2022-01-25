@@ -4,13 +4,13 @@ import { AuthService } from "@src/services/Auth";
 describe("Users functional tests", () => {
   beforeEach(async () => await User.deleteMany());
 
-  describe("When creating a new user", () => {
-    const newUser = {
-      name: "Jhon Doe",
-      email: "jhon_doe@mail.com",
-      password: "12345",
-    };
+  const newUser = {
+    name: "Jhon Doe",
+    email: "jhon_doe@mail.com",
+    password: "12345",
+  };
 
+  describe("When creating a new user", () => {
     it("should successfully create a new user with encrypted password", async () => {
       const { body, status } = await global.testRequest
         .post("/users")
@@ -59,6 +59,48 @@ describe("Users functional tests", () => {
       expect(body).toEqual({
         code: 409,
         error: "User validation failed: email: already exists in the database",
+      });
+    });
+  });
+
+  describe("When authenticating a user", () => {
+    it("should generate a token for a valid user", async () => {
+      await new User(newUser).save();
+
+      const { body, status } = await global.testRequest
+        .post("/users/authenticate")
+        .send({ email: newUser.email, password: newUser.password });
+
+      expect(status).toBe(200);
+
+      expect(body).toEqual(
+        expect.objectContaining({ token: expect.any(String) })
+      );
+    });
+
+    it("should return unauthorized if the user with the given email isn't found", async () => {
+      const { body, status } = await testRequest
+        .post("/users/authenticate")
+        .send({ email: "invalid_email", password: newUser.password });
+
+      expect(status).toBe(401);
+
+      expect(body).toEqual({
+        code: 401,
+        error: `email or password incorrect`,
+      });
+    });
+
+    it("should return unauthorized if the password given by the user is incorrect", async () => {
+      const { body, status } = await testRequest
+        .post("/users/authenticate")
+        .send({ email: newUser.email, password: "invalid_password" });
+
+      expect(status).toBe(401);
+
+      expect(body).toEqual({
+        code: 401,
+        error: `email or password incorrect`,
       });
     });
   });
