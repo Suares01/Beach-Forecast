@@ -2,9 +2,7 @@ import { IForecastPoint, StormGlass } from "@src/clients/StormGlass";
 import { IBeach } from "@src/models/Beach";
 import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 
-export interface IBeachForecast
-  extends Omit<IBeach, "userId">,
-    IForecastPoint {}
+export interface IBeachForecast extends Omit<IBeach, "user">, IForecastPoint {}
 
 export interface ITimeForecast {
   time: string;
