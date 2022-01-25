@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { Controller, Post } from "@overnightjs/core";
 import { IUser, User } from "@src/models/User";
+import { AuthService } from "@src/services/Auth";
 
 import { BaseController } from ".";
 
@@ -20,5 +21,37 @@ export class UsresController extends BaseController {
     } catch (err) {
       return this.sendCreatedUpdateErrorResponse(res, err);
     }
+  }
+
+  @Post("authenticate")
+  async login(req: Request, res: Response): Promise<Response> {
+    const { email, password } = req.body as IUser;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(401).send({
+        code: 401,
+        error: "email or password incorrect",
+      });
+
+    const verifyPassword = await AuthService.comparePassword(
+      password,
+      user.password
+    );
+
+    if (!verifyPassword)
+      return res.status(401).send({
+        code: 401,
+        error: "email or password incorrect",
+      });
+
+    const token = AuthService.generateToken({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
+
+    return res.status(200).send({ token });
   }
 }
