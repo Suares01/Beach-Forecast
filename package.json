@@ -11,7 +11,10 @@
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "start": "yarn build && pm2 start ./ecosystem.config.js"
+    "start": "pm2 start ./ecosystem.config.js"
+  },
+  "engines": {
+    "node": "16.13.1"
   },
   "repository": {
     "type": "git",
