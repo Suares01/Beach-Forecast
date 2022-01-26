@@ -9,5 +9,5 @@ const server = new SetupServer();
 
 process.once("SIGINT", async () => {
   await server.close();
-  process.exit(0);
+  //  process.exit(0);
 });
