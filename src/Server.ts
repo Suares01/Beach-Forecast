@@ -36,6 +36,7 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
+    process.send?.("ready");
     this.app.listen(this.port, () => {
       console.log(
         "\x1b[32m%s\x1b[0m",
