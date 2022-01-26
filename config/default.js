@@ -1,5 +1,3 @@
-require("dotenv/config");
-
 const { DB_USER, DB_PASS, DB_NAME, DB_PORT, API_KEY, TOKEN_SECRET } =
   process.env;
 
