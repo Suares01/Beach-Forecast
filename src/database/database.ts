@@ -22,6 +22,10 @@ export const connect = async (): Promise<Mongoose> => {
 };
 
 export const close = (): Promise<void> => {
+  console.log({
+    database: database.uri,
+    port: process.env.PORT,
+  });
   console.log("\x1b[32m%s\x1b[0m", "Database disconnected");
 
   return mongoose.connection.close();
