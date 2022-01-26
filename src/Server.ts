@@ -37,7 +37,6 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      (<any>process).send("ready");
       console.log(
         "\x1b[32m%s\x1b[0m",
         `Server is running on port ${this.port}`
