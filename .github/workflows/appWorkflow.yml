@@ -11,6 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      API_KEY: ${{ secrets.API_KEY }}
     strategy:
       matrix:
         node-version: [16.13.1]
@@ -32,12 +39,8 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Run all tests
-        env:
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          API_KEY: ${{ secrets.API_KEY }}
+      - name: List env
+        run: env
+
+      - name: Run all test
         run: yarn test
