@@ -6,6 +6,9 @@ module.exports = {
       watch: "./dist",
       instance_var: "INSTANCE_ID",
       env: {
+        NODE_ENV: "development",
+      },
+      env_production: {
         NODE_ENV: "production",
       },
       node_args: "-r dotenv/config",
