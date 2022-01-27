@@ -16,6 +16,7 @@ export interface IDatabaseConfig {
 }
 
 export interface IConfig {
+  port: number;
   database: IDatabaseConfig;
   auth: IAuth;
   resources: IResourcesConfig;
