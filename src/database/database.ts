@@ -1,12 +1,13 @@
+import "dotenv/config";
 import config from "config";
 import mongoose, { Mongoose } from "mongoose";
 
 import { IDatabaseConfig } from "@config/types/configTypes";
 import { SetupServer } from "@src/Server";
 
-const database = config.get<IDatabaseConfig>("App.database");
+const { DB_USER, DB_PASS } = process.env;
 
-console.log("\x1b[31m%s\x1b[0m", database.uri);
+const database = config.get<IDatabaseConfig>("App.database");
 
 mongoose.connection.on("error", async () => {
   const server = new SetupServer();
@@ -20,7 +21,12 @@ mongoose.connection.once("open", async () =>
 );
 
 export const connect = async (): Promise<Mongoose> =>
-  mongoose.connect(database.uri);
+  mongoose.connect(database.uri, {
+    auth: {
+      username: DB_USER,
+      password: DB_PASS,
+    },
+  });
 
 export const close = (): Promise<void> => {
   console.log("\x1b[32m%s\x1b[0m", "Database disconnected");
