@@ -8,16 +8,15 @@ on:
     branches:
       - main
 
-env:
-  TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_PORT: ${{ secrets.DB_PORT }}
-  DB_PASS: ${{ secrets.DB_PASS }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  API_KEY: ${{ secrets.API_KEY }}
-
 jobs:
   build:
+    env:
+      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      API_KEY: ${{ secrets.API_KEY }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
