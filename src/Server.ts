@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import config from "config";
 
 import { Server } from "@overnightjs/core";
 import * as database from "@src/database/database";
@@ -8,7 +9,7 @@ import { ForecastController } from "./controllers/ForecastController";
 import { UsresController } from "./controllers/UsersController";
 
 export class SetupServer extends Server {
-  constructor(private port = process.env.SERVER_PORT) {
+  constructor(private port = config.get<number>("App.port")) {
     super();
   }
 
@@ -35,8 +36,8 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
+    process.send?.("ready");
     this.app.listen(this.port, () => {
-      (<any>process).send("ready");
       console.log(
         "\x1b[32m%s\x1b[0m",
         `Server is running on port ${this.port}`
