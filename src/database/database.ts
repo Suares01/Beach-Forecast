@@ -9,6 +9,8 @@ const { DB_USER, DB_PASS } = process.env;
 
 const database = config.get<IDatabaseConfig>("App.database");
 
+console.log(database.uri);
+
 mongoose.connection.on("error", async () => {
   const server = new SetupServer();
   console.error("\x1b[31m%s\x1b[0m", "Database connection failed");
