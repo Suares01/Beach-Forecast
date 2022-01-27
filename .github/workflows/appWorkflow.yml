@@ -4,30 +4,31 @@ on:
   push:
     branches:
       - main
-    pull_request:
+  pull_request:
     branches:
       - main
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.13.1]
         mongodb-version: [5.0]
-  steps:
-    - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.1.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Run all tests
-      run: yarn test
-    .github/workflows/appWorkflow.yml
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.1.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+
+      - name: Run all tests
+        run: yarn test
