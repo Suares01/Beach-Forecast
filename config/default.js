@@ -1,12 +1,12 @@
 require("dotenv/config");
 
-const { DB_NAME, API_KEY, TOKEN_SECRET } = process.env;
+const { DB_NAME, API_KEY, DB_PORT, TOKEN_SECRET } = process.env;
 
 module.exports = {
   App: {
     port: 3000,
     database: {
-      uri: `mongodb://localhost:27017/${DB_NAME}?authSource=admin`,
+      uri: `mongodb://localhost:${DB_PORT}/${DB_NAME}`,
     },
     auth: {
       secret: `${TOKEN_SECRET}`,
