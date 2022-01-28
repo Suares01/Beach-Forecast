@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { ClassMiddleware, Controller, Get } from "@overnightjs/core";
+import logger from "@src/log/logger";
 import { authMiddleware } from "@src/middlewares/auth";
 import { Beach } from "@src/models/Beach";
 import { Forecast } from "@src/services/Forecast";
@@ -24,6 +25,7 @@ export class ForecastController {
 
       return res.status(200).send(forecasts);
     } catch (err) {
+      logger.error(err);
       return res.status(500).send({ error: "Something went wrong" });
     }
   }

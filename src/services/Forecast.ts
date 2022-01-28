@@ -1,4 +1,5 @@
 import { IForecastPoint, StormGlass } from "@src/clients/StormGlass";
+import logger from "@src/log/logger";
 import { IBeach } from "@src/models/Beach";
 import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 
@@ -16,6 +17,8 @@ export class Forecast {
     beaches: IBeach[]
   ): Promise<ITimeForecast[]> {
     if (beaches.length === 0) return [];
+
+    logger.info(`Preparing the forecast for ${beaches.length} beaches`);
 
     const beachForecast = await this.beachesForecast(beaches);
 
@@ -35,6 +38,8 @@ export class Forecast {
 
         beachesForecast.push(...beachesWithForecast);
       } catch (err: any) {
+        logger.error(err);
+
         throw new ForecastProcessingInternalError(err.message);
       }
     }
