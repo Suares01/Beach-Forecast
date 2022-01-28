@@ -17,5 +17,9 @@ module.exports = {
         apiKey: `${API_KEY}`,
       },
     },
+    logger: {
+      enabled: true,
+      level: "info",
+    },
   },
 };

@@ -5,5 +5,8 @@ module.exports = {
         apiKey: "test",
       },
     },
+    logger: {
+      enabled: false,
+    },
   },
 };
