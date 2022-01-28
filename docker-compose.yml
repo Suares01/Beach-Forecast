@@ -4,7 +4,6 @@ services:
   database:
     image: mongo
     container_name: database
-    command: mongod --auth
     restart: always
     ports:
       - ${DB_PORT}:27017
