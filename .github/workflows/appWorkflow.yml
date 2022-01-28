@@ -41,7 +41,7 @@ jobs:
         run: yarn test
 
       - name: Deploy App
-        if: ${{ github.ref == "refs/heads/main" }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_token: ${{ secrets.HEROKU_API_TOKEN }}
