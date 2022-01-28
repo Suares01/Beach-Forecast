@@ -11,13 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DB_PASS: ${{ secrets.DB_PASS }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      API_KEY: ${{ secrets.API_KEY }}
     strategy:
       matrix:
         node-version: [16.13.1]
@@ -39,8 +32,19 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: List env
-        run: env
-
       - name: Run all test
+        env:
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: yarn test
+
+      - name: Deploy App
+        if: ${{ github.ref == "refs/heads/main" }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_token: ${{ secrets.HEROKU_API_TOKEN }}
+          heroku_app_name: "beach-points"
+          heroku_email: "suares_silva.01@hotmail.com"
+
