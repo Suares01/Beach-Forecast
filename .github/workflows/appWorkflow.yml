@@ -44,7 +44,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_token: ${{ secrets.HEROKU_API_TOKEN }}
+          heroku_api_key: ${{ secrets.HEROKU_API_TOKEN }}
           heroku_app_name: "beach-points"
           heroku_email: "suares_silva.01@hotmail.com"
 
