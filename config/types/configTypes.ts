@@ -15,13 +15,15 @@ export interface IDatabaseConfig {
   uri: string;
 }
 
+export interface ILoggerConfig {
+  enabled: boolean;
+  level: string;
+}
+
 export interface IConfig {
   port: number;
   database: IDatabaseConfig;
   auth: IAuth;
   resources: IResourcesConfig;
-}
-
-export interface IAppConfig {
-  App: IConfig;
+  logger: ILoggerConfig;
 }
