@@ -64,10 +64,15 @@ describe("Beach forecast functional tests", () => {
   it("should return 500 if something goes wrong during the processing", async () => {
     nockInterceptor.replyWithError("Something went wrong");
 
-    const { status } = await global.testRequest
+    const { status, body } = await global.testRequest
       .get("/forecast")
       .set({ "x-access-token": token });
 
     expect(status).toBe(500);
+    expect(body).toEqual({
+      code: 500,
+      error: "Internal Server Error",
+      message: "Something went wrong",
+    });
   });
 });
