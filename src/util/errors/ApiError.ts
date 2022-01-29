@@ -1,7 +1,7 @@
 import httpStatusCodes, {
   IAPIError,
   IAPIErrorResponse,
-} from "./interfaces/ErrorInterfaces";
+} from "./interfaces/apiErrorInterfaces";
 
 export class APIError {
   public static format(error: IAPIError): IAPIErrorResponse {

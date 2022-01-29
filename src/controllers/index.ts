@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import logger from "@src/log/logger";
 import { CustomValidation } from "@src/models/User";
 import { APIError } from "@src/util/errors/ApiError";
-import { IAPIError } from "@src/util/errors/interfaces/ErrorInterfaces";
+import { IAPIError } from "@src/util/errors/interfaces/apiErrorInterfaces";
 
 export abstract class BaseController {
   protected sendCreatedUpdateErrorResponse(
