@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { Controller, Post } from "@overnightjs/core";
 import { IUser, User } from "@src/models/User";
 import { AuthService } from "@src/services/Auth";
+import { APIError } from "@src/util/errors/ApiError";
 
 import { BaseController } from ".";
 
@@ -30,10 +31,12 @@ export class UsresController extends BaseController {
     const user = await User.findOne({ email });
 
     if (!user)
-      return res.status(401).send({
-        code: 401,
-        error: "email or password incorrect",
-      });
+      return res.status(401).send(
+        APIError.format({
+          code: 401,
+          message: "email or password incorrect",
+        })
+      );
 
     const verifyPassword = await AuthService.comparePassword(
       password,
@@ -41,10 +44,12 @@ export class UsresController extends BaseController {
     );
 
     if (!verifyPassword)
-      return res.status(401).send({
-        code: 401,
-        error: "email or password incorrect",
-      });
+      return res.status(401).send(
+        APIError.format({
+          code: 401,
+          message: "email or password incorrect",
+        })
+      );
 
     const token = AuthService.generateToken({
       id: user.id,
