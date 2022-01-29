@@ -3,24 +3,21 @@ import mongoose, { Mongoose } from "mongoose";
 
 import { IDatabaseConfig } from "@config/types/configTypes";
 import logger from "@src/log/logger";
-import { SetupServer } from "@src/Server";
 
 const database = config.get<IDatabaseConfig>("App.database");
 
-mongoose.connection.on("error", async () => {
-  const server = new SetupServer();
-  logger.error("Database connection failed");
+mongoose.connection.on("error", (error) =>
+  logger.error(`Database error: ${error}`)
+);
 
-  await server.close();
-});
+mongoose.connection.on("open", () => logger.info("Database connected"));
 
-mongoose.connection.once("open", async () => logger.info("Database connected"));
+mongoose.connection.on("disconnected", () =>
+  logger.info("Database disconnected")
+);
 
 export const connect = async (): Promise<Mongoose> =>
-  mongoose.connect(database.uri);
+  await mongoose.connect(database.uri);
 
-export const close = (): Promise<void> => {
-  logger.info("Database disconnected");
-
-  return mongoose.connection.close();
-};
+export const close = async (): Promise<void> =>
+  await mongoose.connection.close();
