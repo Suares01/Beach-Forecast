@@ -5,7 +5,7 @@ import { ILoggerConfig } from "@config/types/configTypes";
 
 const logger = config.get<ILoggerConfig>("App.logger");
 
-export default pino({
+export default pino<ILoggerConfig>({
   enabled: logger.enabled,
   level: logger.level,
 });
