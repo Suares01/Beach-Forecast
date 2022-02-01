@@ -10,7 +10,7 @@ import * as database from "@src/database/database";
 
 import { BeachesController } from "./controllers/BeachesController";
 import { ForecastController } from "./controllers/ForecastController";
-import { UsresController } from "./controllers/UsersController";
+import { UsersController } from "./controllers/UsersController";
 import logger from "./log/logger";
 
 export class SetupServer extends Server {
@@ -47,7 +47,7 @@ export class SetupServer extends Server {
     this.addControllers([
       new ForecastController(),
       new BeachesController(),
-      new UsresController(),
+      new UsersController(),
     ]);
   }
 
