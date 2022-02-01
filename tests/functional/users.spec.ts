@@ -109,4 +109,38 @@ describe("Users functional tests", () => {
       });
     });
   });
+
+  describe("When getting user profile info", () => {
+    it("should return the token's owner profile information", async () => {
+      const user = await new User(newUser).save();
+
+      const token = AuthService.generateToken(user.toJSON());
+
+      const { body, status } = await global.testRequest
+        .get("/users/me")
+        .set({ "x-access-token": token });
+
+      expect(status).toBe(200);
+      expect(body).toMatchObject(
+        JSON.parse(
+          JSON.stringify({
+            user: { id: user.id, name: user.name, email: user.email },
+          })
+        )
+      );
+    });
+
+    it("should return Not Found when the user is not found", async () => {
+      const user = new User(newUser);
+
+      const token = AuthService.generateToken(user.toJSON());
+
+      const { body, status } = await global.testRequest
+        .get("/users/me")
+        .set({ "x-access-token": token });
+
+      expect(status).toBe(404);
+      expect(body.message).toBe("User not found");
+    });
+  });
 });
