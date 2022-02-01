@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
-import { Controller, Post } from "@overnightjs/core";
+import { Controller, Get, Middleware, Post } from "@overnightjs/core";
+import { authMiddleware } from "@src/middlewares/auth";
 import { IUser, User } from "@src/models/User";
 import { AuthService } from "@src/services/Auth";
 import { APIError } from "@src/util/errors/ApiError";
@@ -8,7 +9,7 @@ import { APIError } from "@src/util/errors/ApiError";
 import { BaseController } from ".";
 
 @Controller("users")
-export class UsresController extends BaseController {
+export class UsersController extends BaseController {
   @Post("")
   async create(req: Request, res: Response): Promise<Response> {
     try {
@@ -58,5 +59,27 @@ export class UsresController extends BaseController {
     });
 
     return res.status(200).send({ token });
+  }
+
+  @Get("me")
+  @Middleware(authMiddleware)
+  public async me(req: Request, res: Response): Promise<Response> {
+    const email = req.user?.email;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return this.sendErrorResponse(res, {
+        code: 404,
+        message: "User not found",
+      });
+
+    return res.send(
+      JSON.parse(
+        JSON.stringify({
+          user: { id: user.id, name: user.name, email: user.email },
+        })
+      )
+    );
   }
 }
