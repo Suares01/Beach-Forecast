@@ -1,6 +1,6 @@
 import nock from "nock";
 
-import { Beach, BeachPosition } from "@src/models/Beach";
+import { Beach, Position } from "@src/models/Beach";
 import { User } from "@src/models/User";
 import { AuthService } from "@src/services/Auth";
 import apiForecastResponse from "@tests/fixtures/apiForecastResponse.json";
@@ -17,7 +17,7 @@ describe("Beach forecast functional tests", () => {
       lat: -22.9461,
       lng: -43.1811,
       name: "Copacabana",
-      position: BeachPosition.east,
+      position: Position.east,
     };
 
     const defaultUser = {

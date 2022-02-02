@@ -1,5 +1,5 @@
 import { StormGlass } from "@src/clients/StormGlass";
-import { BeachPosition, IBeach } from "@src/models/Beach";
+import { Position, IBeach } from "@src/models/Beach";
 import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 import stormGlassNormalizedResponseFixture from "@tests/fixtures/stormGlassNormalizedWeather15hoursFixtues.json";
 
@@ -15,7 +15,7 @@ describe("Forecast Service", () => {
       lat: -22.9461,
       lng: -43.1811,
       name: "Copacabana",
-      position: BeachPosition.east,
+      position: Position.east,
       user: "fake_id",
     },
   ];
