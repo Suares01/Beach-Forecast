@@ -1,3 +1,4 @@
+import { IForecastPoint } from "@src/clients/StormGlass";
 import { IBeach, Position } from "@src/models/Beach";
 
 const waveHeights = {
@@ -18,7 +19,25 @@ const waveHeights = {
 export class Rating {
   constructor(private beach: IBeach) {}
 
-  public ratingBasedOnWindAndWavePositions(
+  public getRateForPoint(point: IForecastPoint): number {
+    const waveDirections = this.getPositionFromDirection(point.waveDirection);
+    const windDirections = this.getPositionFromDirection(point.windDirection);
+
+    const windAndWaveRate = this.ratingBasedOnWindAndWavewindPosition(
+      waveDirections,
+      windDirections
+    );
+
+    const swellPeriodRate = this.ratingForSwellPeriod(point.swellPeriod);
+
+    const swellHeightRate = this.ratingForSwellHeight(point.swellHeight);
+
+    const rating = (windAndWaveRate + swellPeriodRate + swellHeightRate) / 3;
+
+    return Math.round(rating);
+  }
+
+  public ratingBasedOnWindAndWavewindPosition(
     wavePosition: Position,
     windPosition: Position
   ): number {
@@ -39,22 +58,38 @@ export class Rating {
     return 5;
   }
 
-  public ratingForSwellSize(swellSize: number): number {
-    if (swellSize < waveHeights.ankleToKnee.min) return 1;
+  public ratingForSwellHeight(swellHeight: number): number {
+    if (swellHeight < waveHeights.ankleToKnee.min) return 1;
 
     if (
-      swellSize >= waveHeights.ankleToKnee.min &&
-      swellSize < waveHeights.ankleToKnee.max
+      swellHeight >= waveHeights.ankleToKnee.min &&
+      swellHeight < waveHeights.ankleToKnee.max
     )
       return 2;
 
     if (
-      swellSize >= waveHeights.waistHigh.min &&
-      swellSize <= waveHeights.waistHigh.max
+      swellHeight >= waveHeights.waistHigh.min &&
+      swellHeight <= waveHeights.waistHigh.max
     )
       return 3;
 
     return 5;
+  }
+
+  public getPositionFromDirection(coordinates: number): Position {
+    if (
+      (coordinates >= 315 && coordinates <= 360) ||
+      (coordinates >= 0 && coordinates <= 35)
+    )
+      return Position.north;
+
+    if (coordinates >= 36 && coordinates <= 125) return Position.east;
+
+    if (coordinates >= 126 && coordinates <= 225) return Position.south;
+
+    if (coordinates >= 226 && coordinates <= 314) return Position.west;
+
+    return Position.north;
   }
 
   private isWindOffShore(
