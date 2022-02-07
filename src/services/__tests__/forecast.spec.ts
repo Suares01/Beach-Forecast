@@ -73,7 +73,7 @@ describe("Forecast Service", () => {
     );
   });
 
-  it("should return the forecast for multiple beaches in the same hour with different ratings", async () => {
+  it("should return the forecast for multiple beaches in the same hour with different ratings ordered by rating", async () => {
     mockedStormGlass.fetchPoints.mockResolvedValueOnce([
       {
         swellDirection: 123.41,
@@ -125,21 +125,6 @@ describe("Forecast Service", () => {
             lat: -22.9461,
             lng: -43.1811,
             name: "Copacabana",
-            position: Position.east,
-            rating: 2,
-            swellDirection: 123.41,
-            swellHeight: 0.72,
-            swellPeriod: 13.67,
-            time: "2022-01-11T18:00:00+00:00",
-            waveDirection: 232.12,
-            waveHeight: 0.72,
-            windDirection: 310.65,
-            windSpeed: 100,
-          },
-          {
-            lat: -22.9461,
-            lng: -43.1811,
-            name: "Copacabana",
             position: Position.north,
             rating: 3,
             swellDirection: 0,
@@ -149,6 +134,21 @@ describe("Forecast Service", () => {
             waveDirection: 270,
             waveHeight: 2.07,
             windDirection: 299.45,
+            windSpeed: 100,
+          },
+          {
+            lat: -22.9461,
+            lng: -43.1811,
+            name: "Copacabana",
+            position: Position.east,
+            rating: 2,
+            swellDirection: 123.41,
+            swellHeight: 0.72,
+            swellPeriod: 13.67,
+            time: "2022-01-11T18:00:00+00:00",
+            waveDirection: 232.12,
+            waveHeight: 0.72,
+            windDirection: 310.65,
             windSpeed: 100,
           },
         ],
