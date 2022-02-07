@@ -3,7 +3,11 @@ import logger from "@src/log/logger";
 import { IBeach } from "@src/models/Beach";
 import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 
-export interface IBeachForecast extends Omit<IBeach, "user">, IForecastPoint {}
+import { Rating } from "./Rating";
+
+export interface IBeachForecast extends Omit<IBeach, "user">, IForecastPoint {
+  rating: number;
+}
 
 export interface ITimeForecast {
   time: string;
@@ -11,7 +15,10 @@ export interface ITimeForecast {
 }
 
 export class Forecast {
-  constructor(protected stormGlass = new StormGlass()) {}
+  constructor(
+    protected stormGlass = new StormGlass(),
+    protected RatingService: typeof Rating = Rating
+  ) {}
 
   public async processForecastForBeaches(
     beaches: IBeach[]
@@ -57,7 +64,7 @@ export class Forecast {
         lng: beach.lng,
         position: beach.position,
         name: beach.name,
-        rating: 1,
+        rating: new this.RatingService(beach).getRateForPoint(point),
       },
       ...point,
     }));
