@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { IForecastPoint, StormGlass } from "@src/clients/StormGlass";
 import logger from "@src/log/logger";
 import { IBeach } from "@src/models/Beach";
@@ -31,7 +33,10 @@ export class Forecast {
 
     const forecastByTime = this.mapForecastByTime(beachForecast);
 
-    return forecastByTime;
+    const forecastOrderedByRating =
+      this.orderedForecastByRating(forecastByTime);
+
+    return forecastOrderedByRating;
   }
 
   private async beachesForecast(beaches: IBeach[]): Promise<IBeachForecast[]> {
@@ -87,5 +92,16 @@ export class Forecast {
     }
 
     return forecastByTime;
+  }
+
+  private orderedForecastByRating(forecasts: ITimeForecast[]): ITimeForecast[] {
+    return forecasts.map((forecast) => ({
+      time: forecast.time,
+      forecast: _.orderBy<IBeachForecast>(
+        forecast.forecast,
+        ["rating"],
+        ["desc"]
+      ),
+    }));
   }
 }
