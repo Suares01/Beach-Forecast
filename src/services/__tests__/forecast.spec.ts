@@ -3,7 +3,7 @@ import { Position, IBeach } from "@src/models/Beach";
 import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
 import stormGlassNormalizedResponseFixture from "@tests/fixtures/stormGlassNormalizedWeather15hoursFixtues.json";
 
-import { Forecast } from "../Forecast";
+import { Forecast, ITimeForecast } from "../Forecast";
 
 jest.mock("@src/clients/StormGlass");
 
@@ -34,7 +34,7 @@ describe("Forecast Service", () => {
             lng: -43.1811,
             name: "Copacabana",
             position: "E",
-            rating: 1,
+            rating: 2,
             swellDirection: 156.73,
             swellHeight: 0.72,
             swellPeriod: 8.36,
@@ -71,5 +71,94 @@ describe("Forecast Service", () => {
     await expect(forecast.processForecastForBeaches(beaches)).rejects.toThrow(
       ForecastProcessingInternalError
     );
+  });
+
+  it("should return the forecast for multiple beaches in the same hour with different ratings", async () => {
+    mockedStormGlass.fetchPoints.mockResolvedValueOnce([
+      {
+        swellDirection: 123.41,
+        swellHeight: 0.72,
+        swellPeriod: 13.67,
+        time: "2022-01-11T18:00:00+00:00",
+        waveDirection: 232.12,
+        waveHeight: 0.72,
+        windDirection: 310.65,
+        windSpeed: 100,
+      },
+    ]);
+
+    mockedStormGlass.fetchPoints.mockResolvedValueOnce([
+      {
+        swellDirection: 0,
+        swellHeight: 2.0,
+        swellPeriod: 13.67,
+        time: "2022-01-11T18:00:00+00:00",
+        waveDirection: 270,
+        waveHeight: 2.07,
+        windDirection: 299.45,
+        windSpeed: 100,
+      },
+    ]);
+
+    const beaches: IBeach[] = [
+      {
+        lat: -22.9461,
+        lng: -43.1811,
+        name: "Copacabana",
+        position: Position.east,
+        user: "fake-id",
+      },
+      {
+        lat: -22.9461,
+        lng: -43.1811,
+        name: "Copacabana",
+        position: Position.north,
+        user: "fake-id",
+      },
+    ];
+
+    const expectedResponse: ITimeForecast[] = [
+      {
+        time: "2022-01-11T18:00:00+00:00",
+        forecast: [
+          {
+            lat: -22.9461,
+            lng: -43.1811,
+            name: "Copacabana",
+            position: Position.east,
+            rating: 2,
+            swellDirection: 123.41,
+            swellHeight: 0.72,
+            swellPeriod: 13.67,
+            time: "2022-01-11T18:00:00+00:00",
+            waveDirection: 232.12,
+            waveHeight: 0.72,
+            windDirection: 310.65,
+            windSpeed: 100,
+          },
+          {
+            lat: -22.9461,
+            lng: -43.1811,
+            name: "Copacabana",
+            position: Position.north,
+            rating: 3,
+            swellDirection: 0,
+            swellHeight: 2.0,
+            swellPeriod: 13.67,
+            time: "2022-01-11T18:00:00+00:00",
+            waveDirection: 270,
+            waveHeight: 2.07,
+            windDirection: 299.45,
+            windSpeed: 100,
+          },
+        ],
+      },
+    ];
+
+    const forecast = new Forecast(mockedStormGlass);
+
+    const beachesWithRating = await forecast.processForecastForBeaches(beaches);
+
+    expect(beachesWithRating).toEqual(expectedResponse);
   });
 });
