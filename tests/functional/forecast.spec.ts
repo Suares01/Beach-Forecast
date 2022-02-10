@@ -45,9 +45,10 @@ describe("Beach forecast functional tests", () => {
     .query({
       lat: -22.9461,
       lng: -43.1811,
-      params:
-        "swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed",
+      params: /(.*)/,
       source: "noaa",
+      start: /(.*)/,
+      end: /(.*)/,
     });
 
   it("should return a forecast with just a few times", async () => {
