@@ -3,6 +3,7 @@ import config from "config";
 import cors from "cors";
 import expressPino from "express-pino-logger";
 import * as http from "http";
+import { serve, setup } from "swagger-ui-express";
 
 import { ILoggerConfig } from "@config/types/configTypes";
 import { Server } from "@overnightjs/core";
@@ -11,7 +12,9 @@ import * as database from "@src/database/database";
 import { BeachesController } from "./controllers/BeachesController";
 import { ForecastController } from "./controllers/ForecastController";
 import { UsersController } from "./controllers/UsersController";
+import docs from "./docs/docs.openapi.json";
 import logger from "./log/logger";
+import { apiErrorValidator } from "./middlewares/apiErrorValidator";
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -24,8 +27,10 @@ export class SetupServer extends Server {
 
   public async initServer(): Promise<void> {
     this.setupExpress();
+    await this.docsSetup();
     this.setupControllers();
     await this.databaseSetup();
+    this.setupErrorHandlers();
   }
 
   private setupExpress(): void {
@@ -43,12 +48,20 @@ export class SetupServer extends Server {
     );
   }
 
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
+  }
+
   private setupControllers(): void {
     this.addControllers([
       new ForecastController(),
       new BeachesController(),
       new UsersController(),
     ]);
+  }
+
+  private async docsSetup(): Promise<void> {
+    this.app.use("/docs", serve, setup(docs));
   }
 
   private async databaseSetup(): Promise<void> {
