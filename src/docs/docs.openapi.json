@@ -1,0 +1,643 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Surf Forecast",
+    "version": "1.0.0",
+    "description": "This is an API to get a forecast of your favorite beaches and evaluate which is the best at the moment.",
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "Local server"
+    },
+    {
+      "url": "https://beach-points.herokuapp.com",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users endpoints"
+    },
+    {
+      "name": "Beaches",
+      "description": "Beaches endpoints"
+    },
+    {
+      "name": "Forecast",
+      "description": "Forecast endpoint"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "name": {
+        "type": "string",
+        "example": "John Doe"
+      },
+      "email": {
+        "type": "string",
+        "example": "doe@mail.com"
+      },
+      "password": {
+        "type": "string",
+        "example": "123456@Doe"
+      },
+      "id": {
+        "type": "string",
+        "example": "21954dsfdsgd24"
+      },
+      "token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+          }
+        }
+      },
+      "beachName": {
+        "type": "string",
+        "example": "Copacabana"
+      },
+      "lat": {
+        "type": "number",
+        "example": -22.9461
+      },
+      "lng": {
+        "type": "number",
+        "example": -43.1811
+      },
+      "position": {
+        "type": "string",
+        "enum": [
+          "N",
+          "S",
+          "E",
+          "W"
+        ],
+        "example": "S"
+      },
+      "ReqUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/name"
+          },
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "ResUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "name": {
+            "$ref": "#/components/schemas/name"
+          },
+          "email": {
+            "$ref": "#/components/schemas/email"
+          }
+        }
+      },
+      "AuthUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "ReqBeach": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/beachName"
+          },
+          "lat": {
+            "$ref": "#/components/schemas/lat"
+          },
+          "lng": {
+            "$ref": "#/components/schemas/lng"
+          },
+          "position": {
+            "$ref": "#/components/schemas/position"
+          }
+        }
+      },
+      "ResBeach": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "name": {
+            "$ref": "#/components/schemas/beachName"
+          },
+          "lat": {
+            "$ref": "#/components/schemas/lat"
+          },
+          "lng": {
+            "$ref": "#/components/schemas/lng"
+          },
+          "position": {
+            "$ref": "#/components/schemas/position"
+          }
+        }
+      },
+      "BeachForecast": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "$ref": "#/components/schemas/beachName"
+            },
+            "lat": {
+              "$ref": "#/components/schemas/lat"
+            },
+            "lng": {
+              "$ref": "#/components/schemas/lng"
+            },
+            "position": {
+              "$ref": "#/components/schemas/position"
+            },
+            "rating": {
+              "type": "number",
+              "example": 3
+            },
+            "swellDirection": {
+              "type": "number",
+              "description": "Swell direction in degrees",
+              "example": 300
+            },
+            "swellHeight": {
+              "type": "number",
+              "description": "Swell height in meters",
+              "example": 1
+            },
+            "swellPeriod": {
+              "type": "number",
+              "description": "Swell period in seconds",
+              "example": 13.67
+            },
+            "waveDirection": {
+              "type": "number",
+              "description": "Wave direction in degrees",
+              "example": 234
+            },
+            "waveHeight": {
+              "type": "number",
+              "description": "Wave height in meters",
+              "example": 1.5
+            },
+            "windDirection": {
+              "type": "number",
+              "description": "Wind direction in degrees",
+              "example": 234
+            },
+            "windSpeed": {
+              "type": "number",
+              "description": "Wind speed in meters per second",
+              "example": 10
+            },
+            "time": {
+              "type": "string",
+              "example": "2019-05-31T08:00:00+00:00"
+            }
+          }
+        }
+      },
+      "TimeForecast": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string",
+              "example": "2022-01-11T18:00:00+00:00"
+            },
+            "forecast": {
+              "$ref": "#/components/schemas/BeachForecast"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number"
+          },
+          "error": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "documentation": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user",
+        "description": "This route receive three information: <strong>name, email</strong> and <strong>password</strong>. These information will be used to create a user in the database.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReqUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResUser"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User validation failed: name: Path `name` is required.",
+                  "error": "Bad Request",
+                  "code": 422
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Conflict",
+                  "error": "Conflict",
+                  "code": 409
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/authenticate": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Authenticate user in API",
+        "description": "This route receive the <strong>email</strong> and <strong>password</strong> of the user and return a <strong>JWT Token</strong> if the user is successfully validated.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User has been authenticated with success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/token"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "email or password incorrect",
+                  "error": "Unauthorized",
+                  "code": 401
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user informations",
+        "description": "<strong>User must be authenticated!</strong> This route receive the user token in header and return your informarions.",
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the informations of the token's owner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResUser"
+                }
+              }
+            }
+          },
+          "401_invalid token": {
+            "description": "invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid token",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_invalid signature": {
+            "description": "invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid signature",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_jwt must be provided": {
+            "description": "jwt must be provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "jwt must be provided",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User not found",
+                  "code": 404,
+                  "error": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beaches": {
+      "post": {
+        "tags": [
+          "Beaches"
+        ],
+        "summary": "Create a beach",
+        "description": "<strong>User must be authenticated!</strong> This route is responsible for creating a beach of user interest, and then receive your forecasts.",
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "<strong>lat</strong> (latitude) and <strong>lng</strong> (longitude) are used to locate the beache, you can search the latitude and longitude of the beach you want to create. The <strong>position</strong> is the position the beach is facing (north south, east or west).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReqBeach"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Beach has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResBeach"
+                }
+              }
+            }
+          },
+          "401_invalid token": {
+            "description": "invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid token",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_invalid signature": {
+            "description": "invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid signature",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_jwt must be provided": {
+            "description": "jwt must be provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "jwt must be provided",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error validating the beach data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Error validating beach data",
+                  "error": "Bad Request",
+                  "code": 422
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast": {
+      "get": {
+        "tags": [
+          "Forecast"
+        ],
+        "summary": "Get forecast of the beaches",
+        "description": "<strong>User must be authenticated!</strong> This route return a lists of forecasts separated by time and ordered by the most ranked.",
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of forecasts has been returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeForecast"
+                }
+              }
+            }
+          },
+          "401_invalid token": {
+            "description": "invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid token",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_invalid signature": {
+            "description": "invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "invalid signature",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "401_jwt must be provided": {
+            "description": "jwt must be provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "jwt must be provided",
+                  "code": 401,
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
