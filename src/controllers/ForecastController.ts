@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 
-import { ClassMiddleware, Controller, Get } from "@overnightjs/core";
+import {
+  ClassMiddleware,
+  Controller,
+  Get,
+  Middleware,
+} from "@overnightjs/core";
 import { authMiddleware } from "@src/middlewares/auth";
+import { rateLimiter } from "@src/middlewares/rateLimiter";
 import { Beach } from "@src/models/Beach";
 import { Forecast } from "@src/services/Forecast";
 
@@ -11,6 +17,7 @@ import { BaseController } from ".";
 @ClassMiddleware(authMiddleware)
 export class ForecastController extends BaseController {
   @Get("")
+  @Middleware(rateLimiter("Too many requests to the /forecast endpoint"))
   public async getForecastForLoggedUser(
     req: Request,
     res: Response
