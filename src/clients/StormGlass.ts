@@ -4,6 +4,7 @@ import { IStormGlassConfig } from "@config/types/configTypes";
 import { ClientRequestError } from "@src/util/errors/ClientRequestError";
 import { StormGlassRequestError } from "@src/util/errors/StormGlassRequestError";
 import * as HTTPUtil from "@src/util/Request";
+import { Time } from "@src/util/Time";
 
 export interface IStormGlassSource {
   [key: string]: number;
@@ -47,13 +48,15 @@ export class StormGlass {
     "App.resources.StormGlass"
   );
 
+  private unixTime = Time.getUnixTime();
+
   public async fetchPoints(
     lat: number,
     lng: number
   ): Promise<IForecastPoint[]> {
     try {
       const response = await this.request.get<IStormGlassForecastResponse>(
-        `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}`,
+        `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=${this.unixTime.start}&end=${this.unixTime.end}`,
         {
           baseURL: this.stormGlass.endpoint,
           headers: {
