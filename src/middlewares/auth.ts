@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { AuthService } from "@src/services/Auth";
+import { APIError } from "@src/util/errors/ApiError";
 
 export function authMiddleware(
   req: Partial<Request>,
@@ -10,10 +11,12 @@ export function authMiddleware(
   const token = req.headers?.["x-access-token"];
 
   if (!token || typeof token !== "string") {
-    res.status?.(401).send({
-      code: 401,
-      error: "jwt must be provided",
-    });
+    res.status?.(401).send(
+      APIError.format({
+        message: "jwt must be provided",
+        code: 401,
+      })
+    );
 
     return;
   }
@@ -25,9 +28,11 @@ export function authMiddleware(
 
     next();
   } catch (error: any) {
-    res.status?.(401).send({
-      code: 401,
-      error: error.message,
-    });
+    res.status?.(401).send(
+      APIError.format({
+        message: error.message,
+        code: 401,
+      })
+    );
   }
 }
