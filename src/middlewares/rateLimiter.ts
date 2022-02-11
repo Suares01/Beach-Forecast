@@ -6,7 +6,7 @@ import { APIError } from "@src/util/errors/ApiError";
 export function rateLimiter(message: string): RateLimitRequestHandler {
   return rateLimit({
     windowMs: 3600000, // 1 hour
-    max: 2,
+    max: 10,
     keyGenerator(req: Request): string {
       return req.ip;
     },
