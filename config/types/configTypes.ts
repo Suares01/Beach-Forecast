@@ -1,6 +1,7 @@
 export interface IStormGlassConfig {
   endpoint: string;
   apiKey: string;
+  cacheTtl: number;
 }
 
 export interface IResourcesConfig {
