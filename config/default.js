@@ -15,6 +15,7 @@ module.exports = {
       StormGlass: {
         endpoint: "https://api.stormglass.io/v2",
         apiKey: `${API_KEY}`,
+        cacheTtl: 3600,
       },
     },
     logger: {
