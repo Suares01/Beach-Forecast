@@ -8,7 +8,7 @@
     "start:dev": "yarn node:dev && ts-node-dev -r tsconfig-paths/register -r dotenv/config --inspect --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts | pino-pretty -c",
     "test:functional": "jest --projects ./tests --runInBand",
     "test:unit": "jest --projects .",
-    "test": "yarn test:unit && yarn test:functional",
+    "test": "yarn lint && yarn test:unit && yarn test:functional",
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
