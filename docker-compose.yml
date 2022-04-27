@@ -11,6 +11,12 @@ services:
       - MONGO_INITDB_DATABASE=${DB_NAME}
     volumes:
       - dbdata:/data/db
+  cache:
+    image: redis
+    command: redis-server --requirepass ${CACHE_PASS}
+    hostname: redis
+    ports:
+      - ${CACHE_PORT}:6379
 
 volumes:
   dbdata:
