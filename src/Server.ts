@@ -15,6 +15,7 @@ import { UsersController } from "./controllers/UsersController";
 import docs from "./docs/docs.openapi.json";
 import logger from "./log/logger";
 import { apiErrorValidator } from "./middlewares/apiErrorValidator";
+import * as cacheService from "./services/cacheService";
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -30,7 +31,30 @@ export class SetupServer extends Server {
     await this.docsSetup();
     this.setupControllers();
     await this.databaseSetup();
+    await this.cacheServiceSetup();
     this.setupErrorHandlers();
+  }
+
+  public start(): void {
+    process.send?.("ready");
+    this.app.listen(this.port, () => {
+      logger.info(`Server is running on port ${this.port}`);
+    });
+  }
+
+  public async close(): Promise<void> {
+    await database.close();
+    await cacheService.disconnect();
+
+    if (this.server) {
+      await new Promise((resolve, reject) => {
+        this.server?.close((err) => {
+          if (err) return reject(err);
+
+          return resolve(true);
+        });
+      });
+    }
   }
 
   private setupExpress(): void {
@@ -68,24 +92,7 @@ export class SetupServer extends Server {
     await database.connect();
   }
 
-  public start(): void {
-    process.send?.("ready");
-    this.app.listen(this.port, () => {
-      logger.info(`Server is running on port ${this.port}`);
-    });
-  }
-
-  public async close(): Promise<void> {
-    await database.close();
-
-    if (this.server) {
-      await new Promise((resolve, reject) => {
-        this.server?.close((err) => {
-          if (err) return reject(err);
-
-          return resolve(true);
-        });
-      });
-    }
+  private async cacheServiceSetup(): Promise<void> {
+    await cacheService.connect();
   }
 }
