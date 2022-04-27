@@ -1,8 +1,8 @@
 {
-  "name": "surf_api",
+  "name": "beach-forecast",
   "version": "0.0.1",
   "description": "This is the perfect API for surfers! It shows you what the weather is like and evaluates for you which is the best beach to go surfing at the moment.",
-  "main": "index.ts",
+  "main": "./src",
   "scripts": {
     "node:dev": "export NODE_ENV=development",
     "start:dev": "yarn node:dev && ts-node-dev -r tsconfig-paths/register -r dotenv/config --inspect --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts | pino-pretty -c",
@@ -15,11 +15,11 @@
     "start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "engines": {
-    "node": "16.13.1"
+    "node": "16.14.2"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Suares01/App_Node_Template"
+    "url": "git+https://github.com/Suares01/Beach-Forecast"
   },
   "keywords": [
     "api",
@@ -27,14 +27,16 @@
     "typescript",
     "babel",
     "surf",
-    "weather"
+    "weather",
+    "beach",
+    "sun"
   ],
   "author": "Lucas Suares",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Suares01/App_Node_Template/issues"
+    "url": "https://github.com/Suares01/Beach-Forecast/issues"
   },
-  "homepage": "https://github.com/Suares01/App_Node_Template.git",
+  "homepage": "https://github.com/Suares01/Beach-Forecast.git",
   "devDependencies": {
     "@babel/cli": "^7.16.7",
     "@babel/core": "^7.16.7",
@@ -94,9 +96,9 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.1.7",
-    "node-cache": "^5.1.2",
     "pino": "^7.6.4",
     "pm2": "^5.1.2",
+    "redis": "^4.0.6",
     "swagger-ui-express": "^4.3.0"
   }
 }
