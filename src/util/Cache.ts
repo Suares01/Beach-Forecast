@@ -1,23 +1,25 @@
-import NodeCache from "node-cache";
+import Redis from "@src/services/cacheService";
 
-class Cache {
-  constructor(protected cacheService = new NodeCache()) {}
+export class Cache {
+  constructor(protected cacheService = Redis) {}
 
-  public async set<T>(key: string, value: T, ttl: number): Promise<boolean> {
-    return this.cacheService.set<T>(key, value, ttl);
+  public async set<T = any>(key: string, value: T, ttl: number): Promise<void> {
+    await this.cacheService.set(key, JSON.stringify(value), {
+      EX: ttl,
+    });
   }
 
-  public async get<T>(key: string): Promise<T | undefined> {
-    const value = this.cacheService.get<T>(key);
+  public async get<T = any>(key: string): Promise<T | undefined> {
+    const stringValue = await this.cacheService.get(key);
 
-    if (!value) return undefined;
+    if (!stringValue) return undefined;
 
-    return value;
+    const objectValue: T = JSON.parse(stringValue);
+
+    return objectValue;
   }
 
   public async clearAllCache(): Promise<void> {
-    return this.cacheService.flushAll();
+    await this.cacheService.flushAll();
   }
 }
-
-export default new Cache();
