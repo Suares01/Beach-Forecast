@@ -12,8 +12,13 @@ export interface IAuth {
   secret: string;
 }
 
+export interface ICache {
+  url: string;
+  pass: string;
+}
+
 export interface IDatabaseConfig {
-  uri: string;
+  url: string;
 }
 
 export interface ILoggerConfig {
@@ -25,6 +30,7 @@ export interface IConfig {
   port: number;
   database: IDatabaseConfig;
   auth: IAuth;
+  cache: ICache;
   resources: IResourcesConfig;
   logger: ILoggerConfig;
 }
