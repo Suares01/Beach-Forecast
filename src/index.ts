@@ -29,7 +29,7 @@ process.on("uncaughtException", (error) => {
     await server.initServer();
     server.start();
 
-    exitSignals.map((signal) =>
+    exitSignals.forEach((signal) =>
       process.on(signal, async () => {
         try {
           await server.close();
