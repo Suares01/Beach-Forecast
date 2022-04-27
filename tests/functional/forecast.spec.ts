@@ -3,7 +3,7 @@ import nock from "nock";
 import { Beach, Position } from "@src/models/Beach";
 import { User } from "@src/models/User";
 import { AuthService } from "@src/services/Auth";
-import Cache from "@src/util/Cache";
+import { Cache } from "@src/util/Cache";
 import apiForecastResponse from "@tests/fixtures/apiForecastResponse.json";
 import stormGlassWeather15hoursFixtures from "@tests/fixtures/stormGlassWeather15hoursFixtures.json";
 
@@ -35,7 +35,7 @@ describe("Beach forecast functional tests", () => {
 
     await beach.save();
 
-    await Cache.clearAllCache();
+    await new Cache().clearAllCache();
   });
 
   const nockInterceptor = nock("https://api.stormglass.io", {

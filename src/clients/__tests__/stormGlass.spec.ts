@@ -1,5 +1,5 @@
 import { StormGlass } from "@src/clients/StormGlass";
-import Cache from "@src/util/Cache";
+import { Cache } from "@src/util/Cache";
 import * as HTTPUtil from "@src/util/Request";
 import stormGlassNormalizedWeatherFixtures from "@tests/fixtures/stormGlassNormalizedWeather15hoursFixtues.json";
 import stormGlassWeatherFixtures from "@tests/fixtures/stormGlassWeather15hoursFixtures.json";
@@ -14,7 +14,7 @@ describe("Storm Glass client", () => {
 
   const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
-  const MockedCache = Cache as jest.Mocked<typeof Cache>;
+  const MockedCache = new Cache() as jest.Mocked<Cache>;
 
   const lat = -22.9461;
   const lng = -43.1811;

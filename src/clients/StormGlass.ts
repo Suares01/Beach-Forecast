@@ -2,7 +2,7 @@ import config from "config";
 
 import { IStormGlassConfig } from "@config/types/configTypes";
 import logger from "@src/log/logger";
-import Cache from "@src/util/Cache";
+import { Cache } from "@src/util/Cache";
 import { ClientRequestError } from "@src/util/errors/ClientRequestError";
 import { StormGlassRequestError } from "@src/util/errors/StormGlassRequestError";
 import * as HTTPUtil from "@src/util/Request";
@@ -41,7 +41,7 @@ export interface IForecastPoint {
 export class StormGlass {
   constructor(
     protected request = new HTTPUtil.Request(),
-    protected cache = Cache
+    protected cache = new Cache()
   ) {}
 
   private readonly stormGlassAPIParams =
@@ -119,16 +119,14 @@ export class StormGlass {
   private async setForecastInCache(
     key: string,
     forecast: IForecastPoint[]
-  ): Promise<boolean> {
+  ): Promise<void> {
     logger.info(`Adding forecast in cache with key: ${key}`);
 
-    const setForecast = await this.cache.set<IForecastPoint[]>(
+    await this.cache.set<IForecastPoint[]>(
       key,
       forecast,
       this.stormGlass.cacheTtl
     );
-
-    return setForecast;
   }
 
   private generateCacheKey(lat: number, lng: number): string {
