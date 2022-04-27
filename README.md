@@ -31,10 +31,10 @@ That's an API to get forecasts of your favorite beaches. You can register the be
 
 ## Features
 
-1. Register and user login
-2. Register beaches
-3. Forecast rating algorithm
-4. Forecasts for registered beaches
+- [x] Register and user login
+- [x] Register beaches
+- [x] Forecast rating algorithm
+- [x] Forecasts for registered beaches by user
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -42,19 +42,16 @@ That's an API to get forecasts of your favorite beaches. You can register the be
 
 - Node.js
 - TypeScript
-- Babel
 - Mongoose
-- MongoDB Atlas
 - Express
 - Overnightjs
 - jest/supertest
-- PM2
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Routes
 
-The base endpoint of API is https://beach-points.herokuapp.com/, for more informations and test the routes you can see the documentation [here](https://beach-points.herokuapp.com/docs/).
+The base endpoint of API is https://beachforecast.herokuapp.com/, for more informations and test the routes you can see the documentation [here](https://beachforecast.herokuapp.com/docs/).
 
 **/users**: This route is responsible of the user creation. You have to send the **name**,**email** and **password** in the request body. You receive an object with user id, name and email.
 
