@@ -13,8 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.13.1]
+        node-version: [16.14.2]
         mongodb-version: [5.0]
+        redis-version: [6]
 
     steps:
       - uses: actions/checkout@v2
@@ -29,6 +30,13 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
 
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.4.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
+        env:
+          CI: true
+
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
@@ -38,6 +46,9 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_NAME: ${{ secrets.DB_NAME }}
           API_KEY: ${{ secrets.API_KEY }}
+          CACHE_PORT: ${{ secrets.CACHE_PORT }}
+          CACHE_ENDPOINT: ${{ secrets.CACHE_ENDPOINT }}
+          CACHE_PASS: ${{ secrets.CACHE_PASS }}
         run: yarn test
 
       - name: Deploy App
@@ -45,6 +56,6 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_TOKEN }}
-          heroku_app_name: "beach-points"
+          heroku_app_name: "beachforecast"
           heroku_email: "suares_silva.01@hotmail.com"
 
