@@ -2,6 +2,6 @@
 
 declare namespace Express {
   export interface Request {
-    user?: import("@src/services/Auth").IDecodedUser;
+    user?: import("@services/Auth").DecodedUser;
   }
 }

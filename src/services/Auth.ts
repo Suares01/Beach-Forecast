@@ -3,11 +3,9 @@ import config from "config";
 import { sign, verify } from "jsonwebtoken";
 
 import { IAuth } from "@config/types/configTypes";
-import { IUser } from "@src/models/User";
+import { IUser } from "@modules/users/models/mongoose/User";
 
-export interface IDecodedUser extends Omit<IUser, "_id"> {
-  id: string;
-}
+export type DecodedUser = Omit<IUser, "password">;
 
 export class AuthService {
   private static authConfig = config.get<IAuth>("App.auth");
@@ -38,8 +36,8 @@ export class AuthService {
     return token;
   }
 
-  public static decodeToken(token: string): IDecodedUser {
-    const userInfo = verify(token, this.authConfig.secret) as IDecodedUser;
+  public static decodeToken(token: string): DecodedUser {
+    const userInfo = verify(token, this.authConfig.secret) as DecodedUser;
 
     return userInfo;
   }
