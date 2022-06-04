@@ -1,5 +1,7 @@
-import { IForecastPoint } from "@src/clients/StormGlass";
-import { IBeach, Position } from "@src/models/Beach";
+import { injectable } from "tsyringe";
+
+import { IBeach, Position } from "@modules/beaches/models/mongoose/Beach";
+import { IForecastPoint } from "@modules/forecasts/clients/StormGlass";
 
 const waveHeights = {
   ankleToKnee: {
@@ -16,6 +18,7 @@ const waveHeights = {
   },
 };
 
+@injectable()
 export class Rating {
   constructor(private beach: IBeach) {}
 

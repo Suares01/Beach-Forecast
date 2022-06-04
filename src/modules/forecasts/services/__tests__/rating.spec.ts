@@ -1,4 +1,6 @@
-import { IBeach, Position } from "@src/models/Beach";
+import "reflect-metadata";
+
+import { IBeach, Position } from "@modules/beaches/models/mongoose/Beach";
 
 import { Rating } from "../Rating";
 
