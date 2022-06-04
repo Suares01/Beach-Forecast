@@ -1,9 +1,7 @@
-import { AxiosError } from "axios";
-
 import { InternalError } from "./InternalError";
 
 export class StormGlassRequestError extends InternalError {
-  constructor(err: AxiosError) {
+  constructor(err: any) {
     const internalMessage =
       "Unexpected error returned by the StormGlass service";
     super(
