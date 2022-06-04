@@ -1,16 +1,21 @@
+import { resolve } from "path";
 import { pathsToModuleNameMapper } from "ts-jest";
 
-import rootConfig from "../jest.config";
+import unitConfig from "../jest.config";
 import { compilerOptions } from "../tsconfig.json";
 
-export default {
-  ...rootConfig,
+const integrationJestConfig: import("@jest/types").Config.InitialOptions = {
+  ...unitConfig,
   ...{
-    displayName: "end2end",
+    rootDir: resolve(__dirname),
+    displayName: "integration-tests",
     setupFilesAfterEnv: ["<rootDir>/jestSetup.ts"],
+    collectCoverage: false,
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
       prefix: "<rootDir>/..",
     }),
     testMatch: ["<rootDir>/**/*.spec.ts"],
   },
 };
+
+export default integrationJestConfig;

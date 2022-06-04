@@ -1,12 +1,14 @@
 import supertest from "supertest";
 
-import { SetupServer } from "@src/Server";
+import { ExpressServer } from "../src/http/express/Server";
 
-let server: SetupServer;
+let server: ExpressServer;
+
 beforeAll(async () => {
-  server = new SetupServer();
+  server = new ExpressServer();
   await server.initServer();
-  global.testRequest = supertest(server.app);
+  server.start();
+  global.testRequest = supertest(server.http);
 });
 
 afterAll(async () => await server.close());
