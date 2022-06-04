@@ -1,6 +1,6 @@
 require("dotenv/config");
 
-const { DB_NAME, API_KEY, DB_PORT, TOKEN_SECRET } = process.env;
+const { DB_NAME, API_KEY, DB_PORT, TOKEN_SECRET, CACHE_PASS } = process.env;
 
 module.exports = {
   App: {
@@ -13,11 +13,11 @@ module.exports = {
     },
     cache: {
       url: "",
-      pass: "",
+      pass: CACHE_PASS,
     },
     resources: {
       StormGlass: {
-        endpoint: "https://api.stormglass.io/v2",
+        endpoint: "https://api.stormglass.io",
         apiKey: `${API_KEY}`,
         cacheTtl: 3600,
       },
