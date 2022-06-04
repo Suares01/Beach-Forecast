@@ -2,8 +2,8 @@ import config from "config";
 import mongoose, { Mongoose } from "mongoose";
 
 import { IDatabaseConfig } from "@config/types/configTypes";
-import logger from "@src/log/logger";
-import { InternalError } from "@src/util/errors/InternalError";
+import { InternalError } from "@shared/errors/InternalError";
+import logger from "@shared/logger";
 
 const database = config.get<IDatabaseConfig>("App.database");
 
