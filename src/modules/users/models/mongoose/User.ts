@@ -1,16 +1,16 @@
 import mongoose, { Document, Model } from "mongoose";
 
-import logger from "@src/log/logger";
-import { AuthService } from "@src/services/Auth";
+import { AuthService } from "@services/Auth";
+import logger from "@shared/logger";
 
 export interface IUser {
-  _id?: string;
+  id?: string;
   name: string;
   email: string;
   password: string;
 }
 
-interface IUserModel extends Omit<IUser, "_id">, Document {}
+interface IUserModel extends Omit<IUser, "id">, Document {}
 
 export enum CustomValidation {
   duplicated = "duplicated",
