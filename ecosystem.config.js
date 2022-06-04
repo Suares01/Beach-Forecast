@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "surfApi",
-      script: "./dist/index.js",
+      script: "dist/http/express/index.js",
       watch: "./dist",
       instance_var: "INSTANCE_ID",
       env: {
