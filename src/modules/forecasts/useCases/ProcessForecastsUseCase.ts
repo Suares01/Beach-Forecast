@@ -1,11 +1,12 @@
 import _ from "lodash";
+import { inject, injectable } from "tsyringe";
 
-import { IForecastPoint, StormGlass } from "@src/clients/StormGlass";
-import logger from "@src/log/logger";
-import { IBeach } from "@src/models/Beach";
-import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
+import { IBeach } from "@modules/beaches/models/mongoose/Beach";
+import { ForecastProcessingInternalError } from "@shared/errors/ForecastProcessingInternalError";
+import logger from "@shared/logger";
 
-import { Rating } from "./Rating";
+import { IForecastPoint, StormGlass } from "../clients/StormGlass";
+import { Rating } from "../services/Rating";
 
 export interface IBeachForecast extends Omit<IBeach, "user">, IForecastPoint {
   rating: number;
@@ -16,10 +17,11 @@ export interface ITimeForecast {
   forecast: IBeachForecast[];
 }
 
-export class Forecast {
+@injectable()
+export class ProcessForecastsUseCase {
   constructor(
-    protected stormGlass = new StormGlass(),
-    protected RatingService: typeof Rating = Rating
+    @inject("StormGlassClient") protected stormGlass: StormGlass,
+    @inject("ForecastRating") protected RatingService: typeof Rating
   ) {}
 
   public async processForecastForBeaches(

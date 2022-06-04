@@ -1,14 +1,31 @@
-import { StormGlass } from "@src/clients/StormGlass";
-import { Position, IBeach } from "@src/models/Beach";
-import { ForecastProcessingInternalError } from "@src/util/errors/ForecastProcessingInternalError";
+import "reflect-metadata";
+
+import { IBeach, Position } from "@modules/beaches/models/mongoose/Beach";
+import { StormGlass } from "@modules/forecasts/clients/StormGlass";
+import { Rating } from "@modules/forecasts/services/Rating";
+import { ICacheService } from "@services/cacheService/ICacheService";
+import { ForecastProcessingInternalError } from "@shared/errors/ForecastProcessingInternalError";
 import stormGlassNormalizedResponseFixture from "@tests/fixtures/stormGlassNormalizedWeather15hoursFixtues.json";
 
-import { Forecast, ITimeForecast } from "../Forecast";
+import {
+  ProcessForecastsUseCase,
+  ITimeForecast,
+} from "../ProcessForecastsUseCase";
 
-jest.mock("@src/clients/StormGlass");
+jest.mock("@modules/forecasts/clients/StormGlass");
 
 describe("Forecast Service", () => {
-  const mockedStormGlass = new StormGlass() as jest.Mocked<StormGlass>;
+  const mockedCache: jest.Mocked<ICacheService> = {
+    set: jest.fn(),
+    get: jest.fn(),
+    clearAllCache: jest.fn(),
+    connect: jest.fn(),
+    disconnect: jest.fn(),
+  };
+
+  const mockedStormGlass = new StormGlass(
+    mockedCache
+  ) as jest.Mocked<StormGlass>;
 
   const beaches: IBeach[] = [
     {
@@ -48,14 +65,14 @@ describe("Forecast Service", () => {
       },
     ];
 
-    const forecast = new Forecast(mockedStormGlass);
+    const forecast = new ProcessForecastsUseCase(mockedStormGlass, Rating);
     const beachesWithRating = await forecast.processForecastForBeaches(beaches);
 
     expect(beachesWithRating).toEqual(expectedResponse);
   });
 
   it("should return an empty list when the beaches array is empty", async () => {
-    const forecast = new Forecast();
+    const forecast = new ProcessForecastsUseCase(mockedStormGlass, Rating);
     const response = await forecast.processForecastForBeaches([]);
 
     expect(response).toEqual([]);
@@ -66,7 +83,7 @@ describe("Forecast Service", () => {
       message: "Error fetching data",
     });
 
-    const forecast = new Forecast(mockedStormGlass);
+    const forecast = new ProcessForecastsUseCase(mockedStormGlass, Rating);
 
     await expect(forecast.processForecastForBeaches(beaches)).rejects.toThrow(
       ForecastProcessingInternalError
@@ -155,7 +172,7 @@ describe("Forecast Service", () => {
       },
     ];
 
-    const forecast = new Forecast(mockedStormGlass);
+    const forecast = new ProcessForecastsUseCase(mockedStormGlass, Rating);
 
     const beachesWithRating = await forecast.processForecastForBeaches(beaches);
 
