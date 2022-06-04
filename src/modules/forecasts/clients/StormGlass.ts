@@ -1,12 +1,13 @@
 import config from "config";
+import { container } from "tsyringe";
 
 import { IStormGlassConfig } from "@config/types/configTypes";
-import logger from "@src/log/logger";
-import { Cache } from "@src/util/Cache";
-import { ClientRequestError } from "@src/util/errors/ClientRequestError";
-import { StormGlassRequestError } from "@src/util/errors/StormGlassRequestError";
-import * as HTTPUtil from "@src/util/Request";
-import { Time } from "@src/util/Time";
+import { ICacheService } from "@services/cacheService/ICacheService";
+import { ClientRequestError } from "@shared/errors/ClientRequestError";
+import { StormGlassRequestError } from "@shared/errors/StormGlassRequestError";
+import logger from "@shared/logger";
+import { Request } from "@shared/util/Request";
+import { Time } from "@shared/util/Time";
 
 export interface IStormGlassSource {
   [key: string]: number;
@@ -40,8 +41,8 @@ export interface IForecastPoint {
 
 export class StormGlass {
   constructor(
-    protected request = new HTTPUtil.Request(),
-    protected cache = new Cache()
+    protected cache: ICacheService = container.resolve("CacheService"),
+    protected request = container.resolve<Request>("Request")
   ) {}
 
   private readonly stormGlassAPIParams =
@@ -82,7 +83,7 @@ export class StormGlass {
       logger.info(`Get forecast from external API`);
 
       const response = await this.request.get<IStormGlassForecastResponse>(
-        `/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=${this.unixTime.start}&end=${this.unixTime.end}`,
+        `/v2/weather/point?params=${this.stormGlassAPIParams}&lat=${lat}&lng=${lng}&source=${this.stormGlassAPISource}&start=${this.unixTime.start}&end=${this.unixTime.end}`,
         {
           baseURL: this.stormGlass.endpoint,
           headers: {
@@ -91,13 +92,11 @@ export class StormGlass {
         }
       );
 
-      const { data } = response;
-
-      const normalizedData = this.normalizeResponse(data);
+      const normalizedData = this.normalizeResponse(response.data);
 
       return normalizedData;
     } catch (err: any) {
-      if (HTTPUtil.Request.isRequestError(err))
+      if (this.request.isRequestError(err))
         throw new StormGlassRequestError(err);
 
       throw new ClientRequestError(err);
