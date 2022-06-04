@@ -11,13 +11,16 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
+    "babel-plugin-transform-typescript-metadata",
     [
       "module-resolver",
       {
         "alias": {
-          "@src": "./src",
-          "@tests": "./tests",
-          "@config": "./config"
+          "@modules": "./src/modules",
+          "@shared": "./src/shared",
+          "@services": "./src/services",
+          "@config": "./config",
+          "@database": "./src/database"
         }
       }
     ],

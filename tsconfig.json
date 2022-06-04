@@ -18,16 +18,27 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": [
-        "./src/*"
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
       ],
       "@tests/*": [
         "./tests/*"
       ],
       "@config/*": [
         "./config/*"
+      ],
+      "@database/*": [
+        "./src/database/*"
       ]
     },
     "rootDirs": [
@@ -38,9 +49,7 @@
       "./node_modules/@types",
       "./src/@types",
       "./tests/@types"
-    ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    ]
   },
   "include": [
     "./src/**/*.ts",
