@@ -1,7 +1,7 @@
-import { User } from "@src/models/User";
-import { AuthService } from "@src/services/Auth";
+import { User } from "@modules/users/models/mongoose/User";
+import { AuthService } from "@services/Auth";
 
-describe("Users functional tests", () => {
+describe("Users integration-tests", () => {
   beforeEach(async () => await User.deleteMany());
 
   const newUser = {
@@ -26,8 +26,10 @@ describe("Users functional tests", () => {
 
       expect(body).toEqual(
         expect.objectContaining({
-          ...{ name: newUser.name, email: newUser.email },
-          ...{ id: user?.id },
+          user: {
+            ...{ name: newUser.name, email: newUser.email },
+            ...{ id: user?.id },
+          },
         })
       );
     });
@@ -101,7 +103,6 @@ describe("Users functional tests", () => {
         .send({ email: newUser.email, password: "invalid_password" });
 
       expect(status).toBe(401);
-
       expect(body).toEqual({
         code: 401,
         error: "Unauthorized",
@@ -140,7 +141,7 @@ describe("Users functional tests", () => {
         .set({ "x-access-token": token });
 
       expect(status).toBe(404);
-      expect(body.message).toBe("User not found");
+      expect(body.message).toBe("user not found");
     });
   });
 });

@@ -1,18 +1,24 @@
-import nock from "nock";
+import "reflect-metadata";
 
-import { Beach, Position } from "@src/models/Beach";
-import { User } from "@src/models/User";
-import { AuthService } from "@src/services/Auth";
-import { Cache } from "@src/util/Cache";
+import nock from "nock";
+import { container } from "tsyringe";
+
+import { Beach, Position } from "@modules/beaches/models/mongoose/Beach";
+import { User } from "@modules/users/models/mongoose/User";
+import { AuthService } from "@services/Auth";
+import { ICacheService } from "@services/cacheService/ICacheService";
+import { Time } from "@shared/util/Time";
 import apiForecastResponse from "@tests/fixtures/apiForecastResponse.json";
 import stormGlassWeather15hoursFixtures from "@tests/fixtures/stormGlassWeather15hoursFixtures.json";
 
-describe("Beach forecast functional tests", () => {
+// NOCK IS NOT INTERCEPTING REQUESTS WITH AXIOS
+describe.skip("Forecast integration-tests", () => {
   let token: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     await Beach.deleteMany();
-    await User.deleteMany({});
+    await User.deleteMany();
+    await container.resolve<ICacheService>("CacheService").clearAllCache();
 
     const defaultBeach = {
       lat: -22.9461,
@@ -31,11 +37,10 @@ describe("Beach forecast functional tests", () => {
 
     token = AuthService.generateToken(user.toJSON());
 
-    const beach = new Beach({ ...defaultBeach, ...{ user: user.id } });
-
-    await beach.save();
-
-    await new Cache().clearAllCache();
+    await new Beach({
+      ...defaultBeach,
+      ...{ user: user.id },
+    }).save();
   });
 
   const nockInterceptor = nock("https://api.stormglass.io", {
@@ -48,10 +53,11 @@ describe("Beach forecast functional tests", () => {
     .query({
       lat: -22.9461,
       lng: -43.1811,
-      params: /(.*)/,
+      params:
+        "swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed",
       source: "noaa",
-      start: /(.*)/,
-      end: /(.*)/,
+      start: Time.getUnixTime().start,
+      end: Time.getUnixTime().end,
     });
 
   it("should return a forecast with just a few times", async () => {
@@ -76,7 +82,8 @@ describe("Beach forecast functional tests", () => {
     expect(body).toEqual({
       code: 500,
       error: "Internal Server Error",
-      message: "Something went wrong",
+      message:
+        "Unexpected error during the forecast processing: Unexpected error when trying to communicate to StormGlass: Something went wrong",
     });
   });
 });

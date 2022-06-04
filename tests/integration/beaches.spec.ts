@@ -1,13 +1,13 @@
-import { Beach } from "@src/models/Beach";
-import { User } from "@src/models/User";
-import { AuthService } from "@src/services/Auth";
+import { Beach } from "@modules/beaches/models/mongoose/Beach";
+import { User } from "@modules/users/models/mongoose/User";
+import { AuthService } from "@services/Auth";
 
-describe("Beaches functional tests", () => {
+describe("Beaches integration-tests", () => {
   let token: string;
 
-  beforeEach(async () => {
-    await Beach.deleteMany({});
-    await User.deleteMany({});
+  beforeAll(async () => {
+    await Beach.deleteMany();
+    await User.deleteMany();
 
     const defaultUser = {
       name: "Jhon Doe",
@@ -29,7 +29,7 @@ describe("Beaches functional tests", () => {
 
   describe("When creating a beach", () => {
     it("should create a beach with success", async () => {
-      const response = await global.testRequest
+      const response = await testRequest
         .post("/beaches")
         .set({ "x-access-token": token })
         .send(newBeach);
@@ -40,13 +40,12 @@ describe("Beaches functional tests", () => {
 
     it("should return 422 when there is a validation error", async () => {
       const invalidBeach = {
-        lat: "invalidString",
         lng: -43.1811,
         name: "Copacabana",
         position: "E",
       };
 
-      const response = await global.testRequest
+      const response = await testRequest
         .post("/beaches")
         .set({ "x-access-token": token })
         .send(invalidBeach);
@@ -55,8 +54,7 @@ describe("Beaches functional tests", () => {
       expect(response.body).toEqual({
         code: 422,
         error: "Unprocessable Entity",
-        message:
-          'Beach validation failed: lat: Cast to Number failed for value "invalidString" (type string) at path "lat"',
+        message: "Beach validation failed: lat: Path `lat` is required.",
       });
     });
   });
