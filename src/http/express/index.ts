@@ -1,12 +1,13 @@
-import logger from "./log/logger";
-import { SetupServer } from "./Server";
+import logger from "@shared/logger";
+
+import { ExpressServer } from "./Server";
 
 export enum ExitStatus {
   Failure = 1,
   Success = 0,
 }
 
-const server = new SetupServer();
+const server = new ExpressServer();
 
 const exitSignals: NodeJS.Signals[] = ["SIGINT", "SIGTERM", "SIGQUIT"];
 
