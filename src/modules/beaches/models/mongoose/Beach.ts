@@ -8,7 +8,7 @@ export enum Position {
 }
 
 export interface IBeach {
-  _id?: string;
+  id?: string;
   lat: number;
   lng: number;
   name: string;
@@ -16,7 +16,7 @@ export interface IBeach {
   user: string;
 }
 
-interface IBeachModel extends Omit<IBeach, "_id">, Document {}
+interface IBeachModel extends Omit<IBeach, "id">, Document {}
 
 const schema = new mongoose.Schema(
   {
