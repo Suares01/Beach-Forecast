@@ -4,8 +4,7 @@
   "description": "This is the perfect API for surfers! It shows you what the weather is like and evaluates for you which is the best beach to go surfing at the moment.",
   "main": "src/infra/express/index.ts",
   "scripts": {
-    "node:dev": "export NODE_ENV=development",
-    "start:dev": "yarn node:dev && ts-node-dev -r tsconfig-paths/register -r dotenv/config --inspect --respawn --transpile-only --ignore-watch node_modules --no-notify src/http/express/index.ts | pino-pretty -c",
+    "start:dev": "export NODE_ENV=development && ts-node-dev -r tsconfig-paths/register -r dotenv/config --inspect --respawn --transpile-only --ignore-watch node_modules --no-notify src/http/express/index.ts | pino-pretty -c",
     "test:integration": "jest --projects ./tests --runInBand",
     "test:unit": "jest --projects .",
     "test": "yarn test:unit && yarn test:integration",
@@ -14,7 +13,7 @@
     "style": "prettier --write *.ts",
     "prepare": "husky install",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "start": "pm2-runtime start ecosystem.config.js --env production"
+    "start": "node dist/http/express/index.js -r dotenv/config"
   },
   "engines": {
     "node": "16.14.2"
@@ -107,7 +106,6 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.1.7",
     "pino": "^7.6.4",
-    "pm2": "^5.1.2",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.3.0",
     "tsyringe": "^4.6.0"
