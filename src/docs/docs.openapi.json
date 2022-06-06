@@ -15,7 +15,7 @@
       "description": "Local server"
     },
     {
-      "url": "https://beach-points.herokuapp.com",
+      "url": "https://forecast.up.railway.app/",
       "description": "Production server"
     }
   ],
@@ -99,14 +99,19 @@
       "ResUser": {
         "type": "object",
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/id"
-          },
-          "name": {
-            "$ref": "#/components/schemas/name"
-          },
-          "email": {
-            "$ref": "#/components/schemas/email"
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/id"
+              },
+              "name": {
+                "$ref": "#/components/schemas/name"
+              },
+              "email": {
+                "$ref": "#/components/schemas/email"
+              }
+            }
           }
         }
       },

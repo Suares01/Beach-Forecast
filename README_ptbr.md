@@ -11,7 +11,6 @@ Essa é uma API para obter previsões de suas praias favoritas. Você pode cadas
 <details>
   <summary>Tabela de conteúdo</summary>
   <ol>
-    <li><a href="#limitacoes">Limitações</a></li>
     <li><a href="#funcionalidades">Funcionalidades</a></li>
     <li><a href="#construido-com">Construido com</a></li>
     <li><a href="#rotas">Rotas</a></li>
@@ -23,11 +22,6 @@ Essa é uma API para obter previsões de suas praias favoritas. Você pode cadas
 ---
 
 <div id="limitacoes"></div>
-
-## Limitações
-
-1. Essa API usa o plano gratuito do [Storm Glass](https://stormglass.io/), esse plano tem um limite de 10 requisições por dia. Isso foi melhorado com um sistema de cache que armazena as previsões (o cache é limpo a cada 1 hora).
-2. A API está hospedada na [Heroku](https://www.heroku.com/) e utilizando os [free dynos](https://www.heroku.com/dynos). Isso faz com que a API durma se houver 30 minutos de inatividade, portanto, se você fizer uma requisição e a API estiver dormindo, a requisição terá alguns segundos a mais (tempo para ativação da API).
 
 <p align="right">(<a href="#top">Voltar ao topo</a>)</p>
 
@@ -46,14 +40,13 @@ Essa é uma API para obter previsões de suas praias favoritas. Você pode cadas
 - TypeScript
 - Mongoose
 - Express
-- Overnightjs
 - jest/supertest
 
 <p align="right">(<a href="#top">Voltar ao topo</a>)</p>
 
 ## Rotas
 
-O endpoint base da API é https://beachforecast.herokuapp.com/, para mais informações e testar as rotas veja a documentação [aqui](https://beachforecast.herokuapp.com/docs/).
+O endpoint base da API é https://forecast.up.railway.app/, para mais informações e testar as rotas veja a documentação [aqui](https://forecast.up.railway.app/docs/).
 
 **/users**: Esta rota é responsável pela criação do usuário. Você deve enviar o **nome**,**e-mail** e **senha** no corpo da solicitação. Você recebe um objeto com id de usuário, nome e email.
 

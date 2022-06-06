@@ -11,7 +11,6 @@ That's an API to get forecasts of your favorite beaches. You can register the be
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#limitations">Limitations</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#built-with">Built With</a></li>
     <li><a href="#routes">Routes</a></li>
@@ -21,11 +20,6 @@ That's an API to get forecasts of your favorite beaches. You can register the be
 </details>
 
 ---
-
-## Limitations
-
-1. This API use the free plan of [Storm Glass](https://stormglass.io/), this plan have a limit of 10 request per day. This has been improved with a cache sistem that save the forecasts (the cache is cleared every 1 hour).
-2. The API is hosted in [Heroku](https://www.heroku.com/) and is using [free dynos](https://www.heroku.com/dynos). This causes the API to sleep if there are 30 minutes of inactivity, so if you do a request and the API was sleeping the request will have some seconds more (time to API wake up).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -44,14 +38,13 @@ That's an API to get forecasts of your favorite beaches. You can register the be
 - TypeScript
 - Mongoose
 - Express
-- Overnightjs
 - jest/supertest
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Routes
 
-The base endpoint of API is https://beachforecast.herokuapp.com/, for more informations and test the routes you can see the documentation [here](https://beachforecast.herokuapp.com/docs/).
+The base endpoint of API is https://forecast.up.railway.app/, for more informations and test the routes you can see the documentation [here](https://forecast.up.railway.app/docs/).
 
 **/users**: This route is responsible of the user creation. You have to send the **name**,**email** and **password** in the request body. You receive an object with user id, name and email.
 
